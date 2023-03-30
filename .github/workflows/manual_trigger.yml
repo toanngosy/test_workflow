@@ -22,4 +22,4 @@ jobs:
   do-something:
     runs-on: ubuntu-latest
     steps:
-      - run: sleep ${{sleepTime}}; echo "this is ${{github.event.inputs.token}}"
+      - run: sleep ${{github.event.inputs.sleepTime}}; echo "this is ${{github.event.inputs.token}}"
