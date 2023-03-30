@@ -1,0 +1,22 @@
+name: Manual test
+on:
+  workflow_dispatch:
+    inputs:
+      token:
+        description: token to ssh
+        type: string
+        required: true
+      preferredRun:
+        description: preferred run
+        type: choice
+        default: full
+        options:
+          - full
+          - partial
+
+
+jobs:
+  do-something:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "this is ${{github.event.inputs.token}}"
