@@ -5,7 +5,6 @@ import wandb.apis.reports as wr
 
 RUN_GITHUB = 'Manual test'
 PROJECT_WANDB = 'test_workflow'
-TOKEN_GITHUB = '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'
 def run_process():
     report = wr.Report(
     project=PROJECT_WANDB,
@@ -22,10 +21,6 @@ def run_process():
     report.save()
 
 if __name__ == '__main__':
-    headers = {
-        'accept': 'application/vnd.github+json',
-        'Authorization': f'Bearer {TOKEN_GITHUB}'
-    }
     r = requests.get('https://api.github.com/repos/toanngosy/test_workflow/actions/runs')
     r.status_code
     workflow_runs = json.loads(r.text).get('workflow_runs', [])
