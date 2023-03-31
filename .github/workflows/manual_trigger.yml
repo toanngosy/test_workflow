@@ -6,6 +6,9 @@ on:
         description: token to ssh
         type: string
         required: true
+      sleepTime:
+        description: sleep time
+        type: string
       preferredRun:
         description: preferred run
         type: choice
