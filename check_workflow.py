@@ -11,6 +11,7 @@ latest_report_time = datetime.strptime(latest_report.updated_at, '%Y-%m-%dT%H:%M
 while True:
     if latest_report_time < now:
         time.sleep(10)
+        api = wandb.Api()
         latest_report = api.reports(path=PROJECT_WANDB).next()
         latest_report_time = datetime.strptime(latest_report.updated_at, '%Y-%m-%dT%H:%M:%S')
     else:
