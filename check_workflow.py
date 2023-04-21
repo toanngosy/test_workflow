@@ -43,7 +43,7 @@ if __name__ == '__main__':
     
     create_or_get_branch(repo, github_branch)
     
-    file_sha, file_last_modified = get_report(github_branch, github_report_path)
+    file_sha, file_last_modified = get_report(github_repo, github_branch, github_report_path)
     latest_report_time = datetime.strptime(file_last_modified, '%a, %d %b %Y %H:%M:%S GMT')
     while True:
         if latest_report_time < now:
