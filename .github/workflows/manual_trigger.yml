@@ -38,9 +38,6 @@ jobs:
         echo "REPORT_URL=$report_url" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{secrets.token}}
-        REPO: ${{secrets.repo}}
-        BRANCH: ${{secrets.branch}}
-        REPORT_PATH: ${{secrets.report_path}}
     - name: Echo Output
       run: |
         echo "Generated report at ${{steps.generate-report.outputs.REPORT_URL}}"
