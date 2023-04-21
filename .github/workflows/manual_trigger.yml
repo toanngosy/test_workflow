@@ -21,7 +21,6 @@ on:
 jobs:
   get_workflow_result:
     runs-on: ubuntu-latest
-    environment: test_workflow
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -35,8 +34,13 @@ jobs:
     - name: Generate report
       id: generate-report
       run: |
-        report_url=${{env.REPO}}
+        report_url=$(python check_workflow.py)
         echo "REPORT_URL=$report_url" >> $GITHUB_OUTPUT
+      env:
+        TOKEN: ${{secrets.token}}
+        REPO: toanngosy/test_workflow
+        BRANCH: report
+        REPORT_PATH: REPORT.md
     - name: Echo Output
       run: |
         echo "Generated report at ${{steps.generate-report.outputs.REPORT_URL}}"
