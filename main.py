@@ -49,16 +49,16 @@ def get_report(repo, github_branch, github_report_path):
 
 def run_and_push_report(func, *args, **kwargs):
     load_dotenv()
-    github_token = os.environ.get('GITHUB_TOKEN')
-    github_repo = os.environ.get('GITHUB_REPO')
-    github_branch = os.environ.get('GITHUB_BRANCH')
-    github_report_path = os.environ.get('GITHUB_REPORT_PATH')
+    github_token = os.environ.get('TOKEN')
+    github_repo = os.environ.get('REPO')
+    github_branch = os.environ.get('BRANCH')
+    github_report_path = os.environ.get('REPORT_PATH')
 
     g = Github(github_token)
     repo = g.get_repo(github_repo)
     
     create_or_get_branch(repo, github_branch)
-    file_sha, file_last_modified = create_or_get_report(repo, github_branch, github_report_path)
+    file_sha, _ = get_report(repo, github_branch, github_report_path)
 
     # update or create file content
     result = func(*args, **kwargs)

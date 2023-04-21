@@ -34,10 +34,10 @@ def get_report(repo, github_branch, github_report_path):
 if __name__ == '__main__':
     now = datetime.now()
     load_dotenv()
-    github_token = os.environ.get('GITHUB_TOKEN')
-    github_repo = os.environ.get('GITHUB_REPO')
-    github_branch = os.environ.get('GITHUB_BRANCH')
-    github_report_path = os.environ.get('GITHUB_REPORT_PATH')
+    github_token = os.environ.get('TOKEN')
+    github_repo = os.environ.get('REPO')
+    github_branch = os.environ.get('BRANCH')
+    github_report_path = os.environ.get('REPORT_PATH')
 
     g = Github(github_token)
     repo = g.get_repo(github_repo)
