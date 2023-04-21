@@ -34,7 +34,8 @@ jobs:
     - name: Generate report
       id: generate-report
       run: |
-        env
+        report_url=$(python check_workflow.py)
+        echo "REPORT_URL=$report_url" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{secrets.token}}
         REPO: toanngosy/test_workflow
