@@ -34,13 +34,13 @@ jobs:
     - name: Generate report
       id: generate-report
       run: |
-        report_url=${{env.repo}}
+        report_url=${{env.REPO}}
         echo "REPORT_URL=$report_url" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{secrets.token}}
-        REPO: ${{env.repo}}
-        BRANCH: ${{env.branch}}
-        REPORT_PATH: ${{env.report_path}}
+        REPO: ${{env.REPO}}
+        BRANCH: ${{env.BRANCH}}
+        REPORT_PATH: ${{env.REPORT_PATH}}
     - name: Echo Output
       run: |
         echo "Generated report at ${{steps.generate-report.outputs.REPORT_URL}}"
