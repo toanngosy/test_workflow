@@ -12,7 +12,7 @@ PROJECT_WANDB = 'test_workflow'
 
 
 def run_data_intensive_process():
-    result = str(random.randint(1, 100))
+    result = random.randint(1, 100)
     return result
 
 
