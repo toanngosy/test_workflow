@@ -20,7 +20,8 @@ on:
 
 jobs:
   get_workflow_result:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lates
+    environment: test_workflow
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -33,11 +34,6 @@ jobs:
       run: pip install -r requirements.txt
     - name: Generate report
       id: generate-report
-      env:
-        TOKEN: ${{secrets.token}}
-        REPO: ${{env.REPO}}
-        BRANCH: ${{env.BRANCH}}
-        REPORT_PATH: ${{env.REPORT_PATH}}
       run: |
         report_url=${{env.REPO}}
         echo "REPORT_URL=$report_url" >> $GITHUB_OUTPUT
