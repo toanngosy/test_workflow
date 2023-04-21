@@ -33,14 +33,14 @@ jobs:
       run: pip install -r requirements.txt
     - name: Generate report
       id: generate-report
-      run: |
-        report_url=${{env.REPO}}
-        echo "REPORT_URL=$report_url" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{secrets.token}}
         REPO: ${{env.REPO}}
         BRANCH: ${{env.BRANCH}}
         REPORT_PATH: ${{env.REPORT_PATH}}
+      run: |
+        report_url=${{env.REPO}}
+        echo "REPORT_URL=$report_url" >> $GITHUB_OUTPUT
     - name: Echo Output
       run: |
         echo "Generated report at ${{steps.generate-report.outputs.REPORT_URL}}"
