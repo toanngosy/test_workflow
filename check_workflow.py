@@ -38,7 +38,6 @@ if __name__ == '__main__':
     github_repo = os.environ.get('REPO')
     github_branch = os.environ.get('BRANCH')
     github_report_path = os.environ.get('REPORT_PATH')
-    print(github_repo)
     g = Github(github_token)
     repo = g.get_repo(github_repo)
     
