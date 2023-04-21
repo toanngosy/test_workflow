@@ -23,11 +23,13 @@ def get_report(repo, github_branch, github_report_path):
     try:
         content = repo.get_contents(github_report_path, ref=github_branch)
         file_sha = content.sha
+        latest_commit_sha = repo.get_commits(sha=github_branch)[0].sha
         file_last_modified = content.last_modified
     except:
         file_sha = None
         file_last_modified = None
-    return file_sha, file_last_modified
+        latest_commit_sha = None
+    return latest_commit_sha, file_last_modified
 
 
 if __name__ == '__main__':
