@@ -26,7 +26,6 @@ jobs:
         changed_files=$(git diff --name-only)
         report_summary=$(python gh_side_get_result.py $changed_files)
         echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_OUTPUT
-      run: |
         echo "Receive report: ${{steps.generate-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
         
  
