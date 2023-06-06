@@ -1,10 +1,10 @@
 name: Run intensive task
-run-name: intensive-task_${{inputs.machine}}_${{github.actor}}_${{github.created_at}}
+run-name: intensive-task_${{inputs.machine_name}}_${{github.actor}}
 
 on:
   workflow_dispatch:
     inputs:
-      machine:
+      machine_name:
         description: machine to run
         type: string
         required: true

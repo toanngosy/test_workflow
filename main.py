@@ -3,6 +3,7 @@ import json
 import os
 import random
 import requests
+import yaml
 
 from dotenv import load_dotenv
 from github import Github, GithubException
@@ -75,13 +76,26 @@ def run_and_push_report(func, *args, **kwargs):
 
 
 if __name__ == '__main__':
+    # read config file
+    with open('config.yaml') as f:
+        config = yaml.safe_load(f)
+    
+    run_name = config.get('run_name')
+    machine_name = config.get('machine_name')
+    
     r = requests.get('https://api.github.com/repos/toanngosy/test_workflow/actions/runs')
     r.status_code
     workflow_runs = json.loads(r.text).get('workflow_runs', [])
     if len(workflow_runs):
         for run in workflow_runs:
-            if run['name'] == RUN_GITHUB and run['status'] == 'in_progress':
-                run_and_push_report(run_data_intensive_process)
-                continue
+            try:
+                gh_run_name, gh_machine_name, gh_run_actor = run.split('_')                
+                if (gh_run_name == run_name 
+                    and gh_machine_name == machine_name
+                    and run['status'] == 'in_progress'):
+                        run_and_push_report(run_data_intensive_process)
+                        continue
+            except ValueError:
+                pass
 
     
