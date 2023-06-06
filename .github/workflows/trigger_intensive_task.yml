@@ -1,23 +1,13 @@
-name: Manual test
+name: Run intensive task
+run-name: intensive-task_${{inputs.machine}}_@${{github.actor}}_@${{github.actor}}_@${{github.created_at}}
+
 on:
   workflow_dispatch:
     inputs:
-      token:
-        description: token to ssh
+      machine:
+        description: machine to run
         type: string
         required: true
-      sleepTime:
-        description: sleep time
-        type: string
-      preferredRun:
-        description: preferred run
-        type: choice
-        default: full
-        options:
-          - full
-          - partial
-
-
 jobs:
   get_workflow_result:
     runs-on: ubuntu-latest
@@ -37,3 +27,4 @@ jobs:
       run: |
         report_url=$(python inf_loop.py)
         
+ 
