@@ -16,8 +16,8 @@ def run_data_intensive_process():
 
 def generate_content(result, run_id):
     content = ''
-    content += '{run_id}'
-    content += '\n'
+    content += f'{run_id}'
+    content += '\n\n'
     content += str(random.randint(1, result))
     return content
 
