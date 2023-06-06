@@ -14,8 +14,11 @@ def run_data_intensive_process():
     return result
 
 
-def generate_content(result):
-    content = str(random.randint(1, result))
+def generate_content(result, run_id):
+    content = ''
+    content += '{run_id}'
+    content += '\n'
+    content += str(random.randint(1, result))
     return content
 
 
@@ -94,11 +97,11 @@ if __name__ == '__main__':
     if len(workflow_runs):
         for run in workflow_runs:
             try:
-                gh_run_name, gh_machine_name, gh_run_actor = run['name'].split('_')                
+                gh_run_name, gh_machine_name, gh_run_actor, gh_run_id = run['name'].split('_')                
                 if (gh_run_name == run_name 
                     and gh_machine_name == machine_name
                     and run['status'] == 'in_progress'):
-                        cancel_workflow(run['id'])
+                        cancel_workflow(gh_run_id)
                         run_and_push_report(run_data_intensive_process)
                         continue
             except ValueError:

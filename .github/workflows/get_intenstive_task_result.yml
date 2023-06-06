@@ -1,0 +1,32 @@
+name: Intensive task result
+run-name: result-intensive-task
+
+on:
+  push:
+    branches:
+      report
+
+jobs:
+  get_workflow_result:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    - name: Install requirements
+      run: pip install -r requirements.txt
+    - name: Get report
+      id: get-report
+      run: |
+        changed_files=$(git diff --name-only)
+        report_summary=$(python gh_side_get_result.py $changed_files)
+        echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_OUTPUT
+      run: |
+        echo "Receive report: ${{steps.generate-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
+        
+ 
