@@ -1,5 +1,5 @@
 name: Run intensive task
-run-name: intensive-task_${{inputs.machine}}_@${{github.actor}}_@${{github.actor}}_@${{github.created_at}}
+run-name: intensive-task_${{inputs.machine}}_${{github.actor}}_${{github.created_at}}
 
 on:
   workflow_dispatch:
