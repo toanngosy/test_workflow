@@ -25,6 +25,6 @@ jobs:
     - name: Generate report
       id: generate-report
       run: |
-        report_url=$(python inf_loop.py)
+        report_url=$(python gh_side_inf_loop.py)
         
  
