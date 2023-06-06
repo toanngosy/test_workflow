@@ -48,13 +48,13 @@ def _get_report(repo, github_branch, github_report_path):
     return file_sha, file_last_modified
 
 
-def run_and_push_report(func, *args, **kwargs): 
+def run_and_push_report(func, run_id, *args, **kwargs): 
     _create_or_get_branch(repo, github_branch)
     file_sha, _ = _get_report(repo, github_branch, github_report_path)
 
     # update or create file content
     result = func(*args, **kwargs)
-    new_content = generate_content(result)
+    new_content = generate_content(result, run_id)
     report_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if not file_sha:
         file_status = repo.create_file(github_report_path, f'generate report {report_time}', new_content, branch=github_branch)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
                     and gh_machine_name == machine_name
                     and run['status'] == 'in_progress'):
                         cancel_workflow(gh_run_id)
-                        run_and_push_report(run_data_intensive_process)
+                        run_and_push_report(run_data_intensive_process, gh_run_id)
                         continue
             except ValueError:
                 pass
