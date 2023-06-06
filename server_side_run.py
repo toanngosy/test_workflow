@@ -3,25 +3,26 @@ import json
 import os
 import random
 import requests
+import yaml
 
 from dotenv import load_dotenv
 from github import Github, GithubException
 
-RUN_GITHUB = 'Manual test'
-PROJECT_WANDB = 'test_workflow'
-
 
 def run_data_intensive_process():
-    result = str(random.randint(1, 100))
+    result = random.randint(1, 100)
     return result
 
 
-def generate_content(result):
-    content = str(random.randint(1, result))
+def generate_content(result, run_id):
+    content = ''
+    content += f'{run_id}'
+    content += '\n\n'
+    content += str(random.randint(1, result))
     return content
 
 
-def create_or_get_branch(repo, github_branch):
+def _create_or_get_branch(repo, github_branch):
     try:
         branch = repo.get_branch(github_branch)
     except GithubException:
@@ -34,7 +35,7 @@ def create_or_get_branch(repo, github_branch):
         repo.create_git_ref(f'refs/heads/{github_branch}', base_commit.sha)
 
 
-def get_report(repo, github_branch, github_report_path):
+def _get_report(repo, github_branch, github_report_path):
     try:
         content = repo.get_contents(github_report_path, ref=github_branch)
         file_sha = content.sha
@@ -47,22 +48,13 @@ def get_report(repo, github_branch, github_report_path):
     return file_sha, file_last_modified
 
 
-def run_and_push_report(func, *args, **kwargs):
-    load_dotenv()
-    github_token = os.environ.get('TOKEN')
-    github_repo = os.environ.get('REPO')
-    github_branch = os.environ.get('BRANCH')
-    github_report_path = os.environ.get('REPORT_PATH')
-
-    g = Github(github_token)
-    repo = g.get_repo(github_repo)
-    
-    create_or_get_branch(repo, github_branch)
-    file_sha, _ = get_report(repo, github_branch, github_report_path)
+def run_and_push_report(func, run_id, *args, **kwargs): 
+    _create_or_get_branch(repo, github_branch)
+    file_sha, _ = _get_report(repo, github_branch, github_report_path)
 
     # update or create file content
     result = func(*args, **kwargs)
-    new_content = generate_content(result)
+    new_content = generate_content(result, run_id)
     report_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if not file_sha:
         file_status = repo.create_file(github_report_path, f'generate report {report_time}', new_content, branch=github_branch)
@@ -74,14 +66,45 @@ def run_and_push_report(func, *args, **kwargs):
     return new_file_sha
 
 
+def cancel_workflow(id):
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {github_token}",
+        "X-GitHub-Api-Version": "2022-11-28"
+    }
+    url = f'https://api.github.com/repos/{github_repo}/actions/runs/{id}/cancel'
+    response = requests.post(url, headers=headers)
+    return response.status_code
+    
 if __name__ == '__main__':
+    # read config file
+    with open('config.yaml') as f:
+        config = yaml.safe_load(f)
+    
+    run_name = config.get('run_name')
+    machine_name = config.get('machine_name')
+    load_dotenv()
+    github_token = os.environ.get('TOKEN')
+    github_repo = os.environ.get('REPO')
+    github_branch = os.environ.get('BRANCH')
+    github_report_path = os.environ.get('REPORT_PATH').format(machine_name)
+    g = Github(github_token)
+    repo = g.get_repo(github_repo)
+    
     r = requests.get('https://api.github.com/repos/toanngosy/test_workflow/actions/runs')
     r.status_code
     workflow_runs = json.loads(r.text).get('workflow_runs', [])
     if len(workflow_runs):
         for run in workflow_runs:
-            if run['name'] == RUN_GITHUB and run['status'] == 'in_progress':
-                run_and_push_report(run_data_intensive_process)
-                continue
+            try:
+                gh_run_name, gh_machine_name, gh_run_actor, gh_run_id = run['name'].split('_')                
+                if (gh_run_name == run_name 
+                    and gh_machine_name == machine_name
+                    and run['status'] == 'in_progress'):
+                        cancel_workflow(gh_run_id)
+                        run_and_push_report(run_data_intensive_process, gh_run_id)
+                        continue
+            except ValueError:
+                pass
 
     

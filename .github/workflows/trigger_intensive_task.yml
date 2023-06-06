@@ -1,0 +1,30 @@
+name: Run intensive task
+run-name: intensive-task_${{inputs.machine_name}}_${{github.actor}}_${{github.run_id}}
+
+on:
+  workflow_dispatch:
+    inputs:
+      machine_name:
+        description: machine to run
+        type: string
+        required: true
+jobs:
+  get_workflow_result:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    - name: Install requirements
+      run: pip install -r requirements.txt
+    - name: Generate report
+      id: generate-report
+      run: |
+        report_url=$(python gh_side_inf_loop.py)
+        
+ 
