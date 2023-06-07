@@ -20,11 +20,17 @@ jobs:
         cache: 'pip'
     - name: Install requirements
       run: pip install -r requirements.txt
+    - name: Get latest changes
+      id: files
+      uses: jitterbit/get-changed-files@v1
+      run: |
+        echo ${{steps.files.outputs.all}}
     - name: Get report
       id: get-report
       run: |
-        changed_files=$(git diff --name-only "report~1..origin/report")
-        echo $changed_files >> $GITHUB_STEP_SUMMARY
+        echo "here"
+        # changed_files=$(git diff --name-only "report~1..origin/report")
+        # echo $changed_files >> $GITHUB_STEP_SUMMARY
         # report_summary=$(python gh_side_get_result.py $changed_files)
         # echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_OUTPUT
         # echo "Receive report: ${{steps.generate-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
