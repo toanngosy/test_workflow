@@ -1,5 +1,5 @@
-name: Intensive task result 2
-run-name: result-intensive-task-2
+name: Intensive task result
+run-name: result-intensive-task
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
       run: pip install -r requirements.txt
     - name: Get latest changes
       id: files
-      uses: halaslabs/get-changed-files@v1
+      uses: halaslabs/get-changed-files@v2.2.1
     - name: Get report
       id: get-report
       run: |
