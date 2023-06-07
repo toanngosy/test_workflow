@@ -20,12 +20,15 @@ jobs:
         cache: 'pip'
     - name: Install requirements
       run: pip install -r requirements.txt
+    - name: Get latest changes
+      id: files
+      uses: halaslabs/get-changed-files@v2.2.1
     - name: Get report
       id: get-report
       run: |
-        changed_files=$(git diff --name-only)
-        report_summary=$(python gh_side_get_result.py $changed_files)
+        report_summary=$(python gh_side_get_result.py ${{steps.files.outputs.all}})
         echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_OUTPUT
-        echo "Receive report: ${{steps.generate-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
-        
- 
+    - name: Echo Output
+      run: |
+        echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}"
+        echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY

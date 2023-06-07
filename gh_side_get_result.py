@@ -25,44 +25,29 @@ def get_report(repo, github_branch, github_report_path):
         file_sha = content.sha
         latest_commit_sha = repo.get_commits(sha=github_branch)[0].sha
         file_last_modified = content.last_modified
+        
+        content_str = content.decoded_content.decode()
+        run_id = content_str.split('\n')[0]
     except:
         file_sha = None
         file_last_modified = None
         latest_commit_sha = None
-    return latest_commit_sha, file_last_modified
+        run_id = None
+    return latest_commit_sha, file_last_modified, run_id
 
 
 if __name__ == '__main__':
-    #gmt = pytz.timezone('GMT')
-    #now = datetime.datetime.now(gmt)
-    #gmt = pytz.timezone('GMT')
-    # now = datetime.datetime.now()
-    # load_dotenv()
-    # github_token = os.environ.get('TOKEN')
-    # github_repo = os.environ.get('REPO')
-    # github_branch = os.environ.get('BRANCH')
-    # github_report_path = os.environ.get('REPORT_PATH')
-    # g = Github(github_token)
-    # repo = g.get_repo(github_repo)
+    github_report_path = sys.argv[1]
+    load_dotenv()
+    github_token = os.environ.get('TOKEN')
+    github_repo = os.environ.get('REPO')
+    github_branch = os.environ.get('BRANCH')
+    g = Github(github_token)
+    repo = g.get_repo(github_repo)
     
-    # create_or_get_branch(repo, github_branch)
+    create_or_get_branch(repo, github_branch)
     
-    # file_sha, file_last_modified = get_report(repo, github_branch, github_report_path)
-    # latest_report_time = None
-    # if file_last_modified:
-    #     #latest_report_time = datetime.datetime.strptime(file_last_modified, '%a, %d %b %Y %H:%M:%S GMT').astimezone(gmt)
-    #     latest_report_time = datetime.datetime.strptime(file_last_modified, '%a, %d %b %Y %H:%M:%S GMT')
-    # while True:
-    #     if not latest_report_time or latest_report_time < now:
-    #         time.sleep(10)
-    #         file_sha, file_last_modified = get_report(repo, github_branch, github_report_path)
-    #         latest_report_time = None
-    #         if file_last_modified:
-    #             #latest_report_time = datetime.datetime.strptime(file_last_modified, '%a, %d %b %Y %H:%M:%S GMT').astimezone(gmt)
-    #             latest_report_time = datetime.datetime.strptime(file_last_modified, '%a, %d %b %Y %H:%M:%S GMT')
-    #     else:
-    #         file_url = f'https://github.com/{github_repo}/blob/{file_sha}/{github_report_path}'
-    #         print(f'Report link: {file_url}')
-    #         break
-    print('this is the params: ', sys.argv[1])
+    file_sha, file_last_modified, run_id = get_report(repo, github_branch, github_report_path)
+    
+    print(f'The report for run_id {run_id} is ready to view. See it at {github_report_path}')
     
