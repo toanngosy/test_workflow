@@ -32,5 +32,3 @@ jobs:
       run: |
         echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}"
         echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
-        
- 
