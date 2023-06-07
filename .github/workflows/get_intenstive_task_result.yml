@@ -1,5 +1,5 @@
-name: Intensive task result
-run-name: result-intensive-task
+name: Intensive task result 2
+run-name: result-intensive-task-2
 
 on:
   push:
@@ -27,8 +27,10 @@ jobs:
       id: get-report
       run: |
         report_summary=$(python gh_side_get_result.py ${{steps.files.outputs.all}})
-        echo $report_summary
-        echo "REPORT_SUMMARY='$report_summary'" >> $GITHUB_OUTPUT
+        echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_OUTPUT
+    - name: Echo Output
+      run: |
+        echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}"
         echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
         
  
