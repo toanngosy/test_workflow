@@ -23,12 +23,10 @@ jobs:
     - name: Get latest changes
       id: files
       uses: jitterbit/get-changed-files@v1
-      run: |
-        echo ${{steps.files.outputs.all}}
     - name: Get report
       id: get-report
       run: |
-        echo "here"
+        echo ${{steps.files.outputs.all}}
         # changed_files=$(git diff --name-only "report~1..origin/report")
         # echo $changed_files >> $GITHUB_STEP_SUMMARY
         # report_summary=$(python gh_side_get_result.py $changed_files)
