@@ -28,6 +28,6 @@ jobs:
       run: |
         report_summary=$(python gh_side_get_result.py $steps.files.outputs.all)
         echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_OUTPUT
-        echo "Receive report: ${{steps.generate-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
+        echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
         
  
