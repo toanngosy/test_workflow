@@ -26,6 +26,7 @@ jobs:
     - name: Get report
       id: get-report
       run: |
+      
         report_summary=$(python gh_side_get_result.py ${{steps.files.outputs.all}})
         echo $report_summary
         echo "REPORT_SUMMARY=\"$report_summary\"" >> $GITHUB_OUTPUT
