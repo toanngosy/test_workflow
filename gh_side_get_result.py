@@ -37,12 +37,11 @@ def get_report(repo, github_branch, github_report_path):
 
 
 if __name__ == '__main__':
-    github_report_machine = sys.argv[1].split('/')[1]
+    github_report_path = sys.argv[1]
     load_dotenv()
     github_token = os.environ.get('TOKEN')
     github_repo = os.environ.get('REPO')
     github_branch = os.environ.get('BRANCH')
-    github_report_path = os.environ.get('REPORT_PATH').format(github_report_machine)
     g = Github(github_token)
     repo = g.get_repo(github_repo)
     
