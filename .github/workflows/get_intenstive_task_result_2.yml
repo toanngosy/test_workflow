@@ -1,0 +1,34 @@
+name: Intensive task result 2
+run-name: result-intensive-task-2
+
+on:
+  push:
+    branches:
+      report
+
+jobs:
+  get_workflow_result:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    - name: Install requirements
+      run: pip install -r requirements.txt
+    - name: Get latest changes
+      id: files
+      uses: halaslabs/get-changed-files@v1
+    - name: Get report
+      id: get-report
+      run: |
+        report_summary=$(python gh_side_get_result.py ${{steps.files.outputs.all}})
+        echo $report_summary
+        echo "REPORT_SUMMARY='$report_summary'" >> $GITHUB_OUTPUT
+        echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
+        
+ 
