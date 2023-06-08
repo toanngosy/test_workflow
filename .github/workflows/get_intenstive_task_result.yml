@@ -28,6 +28,10 @@ jobs:
       run: |
         report_summary=$(python gh_side_get_result.py ${{steps.files.outputs.all}})
         echo "REPORT_SUMMARY=$report_summary" >> $GITHUB_OUTPUT
+      env:
+        TOKEN: ${{secrets.token}}
+        REPO: toanngosy/test_workflow
+        BRANCH: report
     - name: Echo Output
       run: |
         echo "Receive report: ${{steps.get-report.outputs.REPORT_SUMMARY}}"
