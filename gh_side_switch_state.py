@@ -76,7 +76,6 @@ def change_machine_status(repo, github_branch, run_id, actor, machine_name):
                                        file_sha,
                                        branch=github_branch)
     new_file_sha = file_status.get('commit').sha
-    new_file_sha = ''
     return new_file_sha, status_str
 
 
