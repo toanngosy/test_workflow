@@ -54,7 +54,7 @@ def change_machine_status(repo, github_branch, machine_name):
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
         if machine_name not in github_machine_status_df.machine_name:
             machine_state = 1
-            status_str = f'{github_machine_status_data}//////{github_machine_status_df}/////{github_machine_status_df.machine_name} Machine: {machine_name} not found in global status file. Adding new machine and flag to run.'
+            status_str = f'{github_machine_status_df.machine_name} Machine: {machine_name} not found in global status file. Adding new machine and flag to run.'
         else:
             machine_state = github_machine_status_df.query(f'machine_name == {machine_name}').status
             if machine_state == 1:
