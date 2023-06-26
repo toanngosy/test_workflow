@@ -29,7 +29,7 @@ def _create_or_get_branch(repo, github_branch):
 def change_machine_status(repo, github_branch, run_id, actor, machine_name):
     _create_or_get_branch(repo, github_branch)
     updated_by = UPDATED_BY
-    github_machine_status_path = f'{github_branch}/{MACHINE_STATUS_FILE}'
+    github_machine_status_path = MACHINE_STATUS_FILE
     try:
         github_machine_status_contents = repo.get_contents(github_machine_status_path,
                                                            ref=github_branch)
