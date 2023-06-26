@@ -22,9 +22,19 @@ jobs:
         cache: 'pip'
     - name: Install requirements
       run: pip install -r requirements.txt
-    - name: Generate report
-      id: generate-report
+    - name: Switch status
+      id: switch-status
       run: |
-        report_url=$(python gh_side_inf_loop.py)
+        switch_state_status=$(python gh_side_switch_state.py ${{github.run_id}} ${{github.event.inputs.machine_name}})
+        echo "STATE_SUMMARY=$switch_state_status" >> $GITHUB_OUTPUT
+      env:
+        TOKEN: ${{secrets.token}}
+        REPO: toanngosy/test_workflow
+        BRANCH: report
+    - name: Echo Output
+      run: |
+        echo "Switch state: ${{steps.switch-status.outputs.STATE_SUMMARY}}"
+        echo "Switch state: ${{steps.switch-status.outputs.STATE_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
+
         
  
