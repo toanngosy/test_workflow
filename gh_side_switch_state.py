@@ -61,8 +61,9 @@ def change_machine_status(repo, github_branch, machine_name):
                 return None, status_str
             else:
                 status_str = f'Machine: {machine_name} is not running. Switch state to run.'
-        updated_content = (f'{github_machine_status_data}\n'
-                           f'{change_time},{machine_name},{machine_state}')
+        github_machine_status_df[github_machine_status_df.machine_name == machine_name]['change_time'] = change_time
+        github_machine_status_df[github_machine_status_df.machine_name == machine_name]['machine_state'] = machine_state
+        updated_content = github_machine_status_df.to_csv(index=False)
         file_status = repo.update_file(github_machine_status_path,
                                        f'generate machine status',
                                        updated_content,
