@@ -44,10 +44,10 @@ def change_machine_status(repo, github_branch, machine_name):
                            f'{change_time},{machine_name},{machine_state}')
         status_str = ''
         
-        file_status = repo.create_file(github_machine_status_path,
-                                       f'generate machine status',
-                                       updated_content,
-                                       branch=github_branch)
+        # file_status = repo.create_file(github_machine_status_path,
+        #                                f'generate machine status',
+        #                                updated_content,
+        #                                branch=github_branch)
     else:
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
         if not machine_name in github_machine_status_df.machine_name:
@@ -62,12 +62,13 @@ def change_machine_status(repo, github_branch, machine_name):
                 status_str = f'Machine: {machine_name} is not running. Switch state to run.'
         updated_content = (f'{github_machine_status_data}\n'
                            f'{change_time},{machine_name},{machine_state}')
-        file_status = repo.update_file(github_machine_status_path,
-                                       f'generate machine status',
-                                       updated_content,
-                                       file_sha,
-                                       branch=github_branch)
-    new_file_sha = file_status.get('commit').sha
+        # file_status = repo.update_file(github_machine_status_path,
+        #                                f'generate machine status',
+        #                                updated_content,
+        #                                file_sha,
+        #                                branch=github_branch)
+    # new_file_sha = file_status.get('commit').sha
+    new_file_sha = ''
     return new_file_sha, status_str
 
 
