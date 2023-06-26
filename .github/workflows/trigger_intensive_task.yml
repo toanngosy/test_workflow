@@ -11,7 +11,6 @@ on:
 jobs:
   get_workflow_result:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -25,7 +24,7 @@ jobs:
     - name: Switch status
       id: switch-status
       run: |
-        switch_state_status=$(python gh_side_switch_state.py ${{github.run_id}} ${{github.event.inputs.machine_name}})
+        switch_state_status=$(python gh_side_switch_state.py ${{github.run_id}} ${{github.actor}} ${{github.event.inputs.machine_name}})
         echo "STATE_SUMMARY=$switch_state_status" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{secrets.token}}

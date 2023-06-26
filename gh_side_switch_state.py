@@ -12,6 +12,7 @@ import base64
 
 
 MACHINE_STATUS_FILE = 'machine_status.csv'
+UPDATED_BY = 'GH Actions'
 
 def _create_or_get_branch(repo, github_branch):
     try:
@@ -25,8 +26,9 @@ def _create_or_get_branch(repo, github_branch):
         repo.create_git_ref(f'refs/heads/{github_branch}', base_commit.sha)
 
 
-def change_machine_status(repo, github_branch, machine_name):
+def change_machine_status(repo, github_branch, run_id, actor, machine_name):
     _create_or_get_branch(repo, github_branch)
+    updated_by = UPDATED_BY
     github_machine_status_path = f'{github_branch}/{MACHINE_STATUS_FILE}'
     try:
         github_machine_status_contents = repo.get_contents(github_machine_status_path,
@@ -40,10 +42,10 @@ def change_machine_status(repo, github_branch, machine_name):
     
     change_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if not file_sha:
-        csv_headers = 'last_updated_timestamp,machine_name,status\n'
+        csv_headers = 'run_id,actor,last_updated_timestamp,update_by,machine_name,status\n'
         machine_state = 1
         updated_content = (f'{csv_headers}'
-                           f'{change_time},{machine_name},{machine_state}')
+                           f'{run_id},{actor},{change_time},{updated_by},{machine_name},{machine_state}')
         status_str = ''
         file_status = repo.create_file(github_machine_status_path,
                                        f'generate machine status',
@@ -62,6 +64,8 @@ def change_machine_status(repo, github_branch, machine_name):
             else:
                 status_str = f'Machine: {machine_name} is not running. Switch state to run.'
         github_machine_status_df.loc[github_machine_status_df.machine_name == machine_name,
+                                     'updated_by'] = updated_by
+        github_machine_status_df.loc[github_machine_status_df.machine_name == machine_name,
                                      'last_updated_timestamp'] = change_time
         github_machine_status_df.loc[github_machine_status_df.machine_name == machine_name,
                                      'status'] = 1
@@ -77,12 +81,12 @@ def change_machine_status(repo, github_branch, machine_name):
 
 
 if __name__ == '__main__':
-    _, run_id, machine_name = sys.argv
+    _, run_id, actor, machine_name = sys.argv
     github_token = os.environ.get('TOKEN')
     github_repo = os.environ.get('REPO')
     github_branch = os.environ.get('BRANCH')
     g = Github(github_token)
     repo = g.get_repo(github_repo)
-    _, status_str = change_machine_status(repo, github_branch, machine_name)
+    _, status_str = change_machine_status(repo, github_branch, run_id, actor, machine_name)
     
     print(f'Github Actions Run ID {run_id} status: {status_str}')
