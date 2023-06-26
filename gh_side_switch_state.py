@@ -5,8 +5,14 @@ import os
 import pytz
 from github import Github, GithubException
 import sys
+import datetime as dt
+import io
+import pandas as pd
 
-def create_or_get_branch(repo, github_branch):
+
+MACHINE_STATUS_FILE = 'machine_status.csv'
+
+def _create_or_get_branch(repo, github_branch):
     try:
         branch = repo.get_branch(github_branch)
     except GithubException:
@@ -19,7 +25,53 @@ def create_or_get_branch(repo, github_branch):
         repo.create_git_ref(f'refs/heads/{github_branch}', base_commit.sha)
 
 
+def change_machine_status(repo, github_branch, machine_name):
+    _create_or_get_branch(repo, github_branch)
+    github_machine_status_path = f'{github_branch}/{MACHINE_STATUS_FILE}'
+    try:
+        github_machine_status_contents = repo.get_contents(github_machine_status_path,
+                                                           ref=github_branch)
+        file_sha = github_machine_status_contents.sha
+        github_machine_status_data = github_machine_status_contents.decoded_content
+    except:
+        file_sha = None
+        github_machine_status_data = ''
+    
+    change_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    if not file_sha:
+        csv_headers = 'last_updated_timestamp,machine_name,status\n'
+        machine_state = 1
+        updated_content = (f'{csv_headers}'
+                           f'{change_time},{machine_name},{machine_state}')
+        
+        file_status = repo.create_file(github_machine_status_path,
+                                       f'generate machine status',
+                                       updated_content,
+                                       branch=github_branch)
+    else:
+        github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
+        if not machine_name in github_machine_status_df.machine_name:
+            machine_state = 1
+        else:
+            github_machine_status_df.query(f'machine_name == {machine_name}').status
+        updated_content = (f'{github_machine_status_data}\n'
+                           f'{change_time},{machine_name},{machine_state}')
+        file_status = repo.update_file(github_machine_status_path,
+                                       f'generate machine status',
+                                       updated_content,
+                                       file_sha,
+                                       branch=github_branch)
+    new_file_sha = file_status.get('commit').sha
+    return new_file_sha
+
+
 if __name__ == '__main__':
     _, run_id, machine_name = sys.argv
+    github_token = os.environ.get('TOKEN')
+    github_repo = os.environ.get('REPO')
+    github_branch = os.environ.get('BRANCH')
+    g = Github(github_token)
+    repo = g.get_repo(github_repo)
+    file_sha = change_machine_status(repo, github_branch, machine_name)
     
-    print(f'{run_id}, {machine_name}')
+    print(f'{run_id}, {machine_name}, {file_sha}')
