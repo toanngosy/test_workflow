@@ -45,18 +45,17 @@ def change_machine_status(repo, github_branch, machine_name):
         updated_content = (f'{csv_headers}'
                            f'{change_time},{machine_name},{machine_state}')
         status_str = ''
-        
-        # file_status = repo.create_file(github_machine_status_path,
-        #                                f'generate machine status',
-        #                                updated_content,
-        #                                branch=github_branch)
+        file_status = repo.create_file(github_machine_status_path,
+                                       f'generate machine status',
+                                       updated_content,
+                                       branch=github_branch)
     else:
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
-        if machine_name not in github_machine_status_df.machine_name:
+        if machine_name not in github_machine_status_df.machine_name.values:
             machine_state = 1
-            status_str = f'{github_machine_status_df} Machine: {machine_name} not found in global status file. Adding new machine and flag to run.'
+            status_str = f'Machine: {machine_name} not found in global status file. Adding new machine and flag to run.'
         else:
-            machine_state = github_machine_status_df.query(f'machine_name == {machine_name}').status
+            machine_state = github_machine_status_df.query(f'machine_name == \'{machine_name}\'').status.values[0]
             if machine_state == 1:
                 status_str = f'Machine: {machine_name} is already flagged to run.'
                 return None, status_str
@@ -64,12 +63,12 @@ def change_machine_status(repo, github_branch, machine_name):
                 status_str = f'Machine: {machine_name} is not running. Switch state to run.'
         updated_content = (f'{github_machine_status_data}\n'
                            f'{change_time},{machine_name},{machine_state}')
-        # file_status = repo.update_file(github_machine_status_path,
-        #                                f'generate machine status',
-        #                                updated_content,
-        #                                file_sha,
-        #                                branch=github_branch)
-    # new_file_sha = file_status.get('commit').sha
+        file_status = repo.update_file(github_machine_status_path,
+                                       f'generate machine status',
+                                       updated_content,
+                                       file_sha,
+                                       branch=github_branch)
+    new_file_sha = file_status.get('commit').sha
     new_file_sha = ''
     return new_file_sha, status_str
 
