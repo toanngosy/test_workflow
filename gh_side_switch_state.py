@@ -8,6 +8,7 @@ import sys
 import datetime as dt
 import io
 import pandas as pd
+import base64
 
 
 MACHINE_STATUS_FILE = 'machine_status.csv'
@@ -31,7 +32,8 @@ def change_machine_status(repo, github_branch, machine_name):
         github_machine_status_contents = repo.get_contents(github_machine_status_path,
                                                            ref=github_branch)
         file_sha = github_machine_status_contents.sha
-        github_machine_status_data = github_machine_status_contents.decoded_content.encode('utf-8')
+        content = github_machine_status_contents.content
+        github_machine_status_data = base64.b64decode(content).decode('utf-8')
     except:
         file_sha = None
         github_machine_status_data = ''
