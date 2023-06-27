@@ -18,14 +18,6 @@ MACHINE_STATUS_FILE = 'machine_status.csv'
 MACHINE_LOG_FILE = 'log.csv'
 
 
-def generate_content(result, run_id):
-    content = ''
-    content += f'{run_id}'
-    content += '\n\n'
-    content += str(random.randint(1, result))
-    return content
-
-
 def _create_or_get_branch(repo, github_branch):
     try:
         branch = repo.get_branch(github_branch)
@@ -37,37 +29,6 @@ def _create_or_get_branch(repo, github_branch):
         base_commit = repo.get_commit(base_branch.commit.sha)
         # create new branch at the head commit of the default branch
         repo.create_git_ref(f'refs/heads/{github_branch}', base_commit.sha)
-
-
-def _get_report(repo, github_branch, github_report_path):
-    try:
-        content = repo.get_contents(github_report_path, ref=github_branch)
-        file_sha = content.sha
-        file_last_modified = content.last_modified
-        print(f'File {github_report_path} exists in branch {github_branch}.')
-    except:
-        file_sha = None
-        file_last_modified = None
-        print(f'File {github_report_path} does not exist in branch {github_report_path}. Creating new file...')
-    return file_sha, file_last_modified
-
-
-def run_and_push_report(func, run_id, *args, **kwargs): 
-    _create_or_get_branch(repo, github_branch)
-    file_sha, _ = _get_report(repo, github_branch, github_report_path)
-
-    # update or create file content
-    result = func(*args, **kwargs)
-    new_content = generate_content(result, run_id)
-    report_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    if not file_sha:
-        file_status = repo.create_file(github_report_path, f'generate report {report_time}', new_content, branch=github_branch)
-        print(f'New file {github_report_path} created in branch {github_branch}.')
-    else:
-        file_status = repo.update_file(github_report_path, f'update report {report_time}', new_content, file_sha, branch=github_branch)
-        print(f'File {github_report_path} updated in branch {github_branch}.')
-    new_file_sha = file_status.get('commit').sha
-    return new_file_sha
 
     
 if __name__ == '__main__':
