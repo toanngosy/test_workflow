@@ -40,12 +40,12 @@ def change_machine_status(repo, github_branch, run_id, actor, machine_name):
         file_sha = None
         github_machine_status_data = ''
     
-    change_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if not file_sha:
         csv_headers = 'run_id,actor,last_updated_timestamp,updated_by,machine_name,status\n'
         machine_state = 1
         updated_content = (f'{csv_headers}'
-                           f'{run_id},{actor},{change_time},{updated_by},{machine_name},{machine_state}')
+                           f'{run_id},{actor},{updated_time},{updated_by},{machine_name},{machine_state}')
         status_str = f'Machines status file not created. Create and flag machine {machine_name} to run.'
         file_status = repo.create_file(github_machine_status_path,
                                        f'generate machine status',
@@ -66,7 +66,7 @@ def change_machine_status(repo, github_branch, run_id, actor, machine_name):
         github_machine_status_df.loc[github_machine_status_df.machine_name == machine_name,
                                      'updated_by'] = updated_by
         github_machine_status_df.loc[github_machine_status_df.machine_name == machine_name,
-                                     'last_updated_timestamp'] = change_time
+                                     'last_updated_timestamp'] = updated_time
         github_machine_status_df.loc[github_machine_status_df.machine_name == machine_name,
                                      'status'] = 1
         updated_content = github_machine_status_df.to_csv(index=False)
