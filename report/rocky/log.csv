@@ -1,4 +1,5 @@
 uuid,actor,last_updated_timestamp,updated_by,machine_name,state,process_id,additional_info
+8d836899-d899-519c-8cb3-4367e8ca4216,toanngosy,2023-08-03 13:17:07,rocky server,rocky,3,1176913,done
 8d836899-d899-519c-8cb3-4367e8ca4216,toanngosy,2023-08-03 13:17:01,rocky server,rocky,3,1176913,running
 8d836899-d899-519c-8cb3-4367e8ca4216,toanngosy,2023-08-03 13:17:00,rocky server,rocky,2,,pending
 8d836899-d899-519c-8cb3-4367e8ca4216,toanngosy,2023-08-03 20:16:37,GH Actions,rocky,1,,request
