@@ -55,7 +55,7 @@ def change_machine_status(repo, github_branch, uuid, actor, machine_name):
     else:
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
         machine_latest_status = github_machine_status_df.iloc[0]
-        if machine_latest_status.machine_state != 0:
+        if machine_latest_status.state != 0:
             status_str = f'Machine: {machine_name} is already flagged to run or occupied at the moment. Abort the request.'
             return None, status_str
         else:
