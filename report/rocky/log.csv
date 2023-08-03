@@ -1,4 +1,0 @@
-run_id,actor,last_updated_timestamp,state,process_id,additional_info
-5382370968,toanngosy,2023-06-26 23:58:33,suceeded,801678.0,report/rocky/REPORT_5382370968.md
-5382370968,toanngosy,2023-06-26 23:45:47,running,801678.0,done
-5382370968,toanngosy,2023-06-26 22:13:50,pending,,done
