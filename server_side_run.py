@@ -78,7 +78,7 @@ if __name__ == '__main__':
             machine_name = machine_latest_status.machine_name
             machine_state = 2
             process_id = None
-            additional_info = None
+            additional_info = 'pending'
             new_log = {'uuid': [uuid],
                        'actor': [actor],
                        'last_updated_timestamp': [updated_time],
@@ -94,21 +94,23 @@ if __name__ == '__main__':
                                         updated_content,
                                         file_sha,
                                         branch=github_branch)
-            file_sha = file_status.get('commit').sha
+            file_sha = repo.get_contents(github_machine_status_path, ref=github_branch).sha
             # try to run first round
             process = subprocess.Popen(['python', './intensive_process.py', str(uuid)], preexec_fn=os.setsid)
-            # if process is running, then add a line to the log that process is running     
+            # if process is 'running', then add a line to the log that process is running     
             updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             machine_state = 3
             process_id = process.pid
-            addtional_info = None
+            additional_info = 'running'
             new_log = {
-                'run_id': [uuid],
+                'uuid': [uuid],
                 'actor': [actor],
                 'last_updated_timestamp': [updated_time],
+                'updated_by': [updated_by],
+                'machine_name': [machine_name],
                 'state': [machine_state],
                 'process_id': [process_id],
-                'additional_info': [addtional_info]
+                'additional_info': [additional_info]
             }
             github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
             updated_content = github_machine_status_df.to_csv(index=False)
@@ -117,21 +119,23 @@ if __name__ == '__main__':
                                         updated_content,
                                         file_sha,
                                         branch=github_branch)
-            file_sha = file_status.get('commit').sha
+            file_sha = repo.get_contents(github_machine_status_path, ref=github_branch).sha
             # check if process is finish
             process.communicate()
             if process.poll() is None or process.poll() == 0:
                 updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                machine_state = 0
+                machine_state = 3
                 process_id = process.pid
-                addtional_info = 'Done'
+                additional_info = 'done'
                 new_log = {
-                    'run_id': [uuid],
-                    'actor': [actor],
-                    'last_updated_timestamp': [updated_time],
-                    'state': [machine_state],
-                    'process_id': [process_id],
-                    'additional_info': [addtional_info]
+                       'uuid': [uuid],
+                       'actor': [actor],
+                       'last_updated_timestamp': [updated_time],
+                       'updated_by': [updated_by],
+                       'machine_name': [machine_name],
+                       'state': [machine_state],
+                       'process_id': [process_id],
+                       'additional_info': [additional_info]
                 }
                 github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
                 updated_content = github_machine_status_df.to_csv(index=False)
@@ -140,41 +144,43 @@ if __name__ == '__main__':
                                             updated_content,
                                             file_sha,
                                             branch=github_branch)
-                file_sha = file_status.get('commit').sha
+                file_sha = repo.get_contents(github_machine_status_path, ref=github_branch).sha
                 # write/push result
                 files = Path('./result').glob("*")
                 file_names = [file.name for file in files if file.is_file()]
                 if f'output_{uuid}.txt' in file_names:
                     is_failed = os.path.getsize(f'./result/error_{uuid}.txt') != 0
                     if is_failed:
-                        state = 'failed'
+                        run_state = 'failed'
                         content_file = f'./result/error_{uuid}.txt' 
                     else:
-                        state = 'suceeded'
+                        run_state = 'suceeded'
                         content_file = f'./result/output_{uuid}.txt'
                     
                     with open(content_file, 'r') as f:
                         content = f.read()
                     
+                    machine_state = 0
                     file_status = repo.create_file(f'report/{machine_name}/REPORT_{uuid}.md', f'generate report {uuid}', content, branch=github_branch)
                     updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    additional_info = f'report/{machine_name}/REPORT_{uuid}.md'
                     new_log = {
-                        'run_id': [uuid],
-                        'actor': [actor],
-                        'last_updated_timestamp': [updated_time],
-                        'state': [state],
-                        'process_id': [process_id],
-                        'additional_info': [f'report/{machine_name}/REPORT_{uuid}.md']
+                       'uuid': [uuid],
+                       'actor': [actor],
+                       'last_updated_timestamp': [updated_time],
+                       'updated_by': [updated_by],
+                       'machine_name': [machine_name],
+                       'state': [machine_state],
+                       'process_id': [process_id],
+                       'additional_info': [additional_info]
                     }
-                    github_machine_status_df = pd.concat([github_machine_status_df, pd.DataFrame(new_log)])
-            
-            github_machine_status_df = github_machine_status_df.sort_values(by='last_updated_timestamp', ascending=False)
-            updated_content = github_machine_status_df.to_csv(index=False)
-            file_status = repo.update_file(github_machine_status_path,
-                                            f'update log for machine {machine_name}',
-                                            updated_content,
-                                            file_sha,
-                                            branch=github_branch)
+                    github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
+                    updated_content = github_machine_status_df.to_csv(index=False)
+                    file_status = repo.update_file(github_machine_status_path,
+                                                    f'update log for machine {machine_name}',
+                                                    updated_content,
+                                                    file_sha,
+                                                    branch=github_branch)
         elif machine_latest_status.state == 2:
             uuid = machine_latest_status.uuid
             actor = machine_latest_status.actor
@@ -187,14 +193,14 @@ if __name__ == '__main__':
             updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             machine_state = 3
             process_id = process.pid
-            addtional_info = None
+            additional_info = None
             new_log = {
-                'run_id': [uuid],
+                'uuid': [uuid],
                 'actor': [actor],
                 'last_updated_timestamp': [updated_time],
                 'state': [machine_state],
                 'process_id': [process_id],
-                'additional_info': [addtional_info]
+                'additional_info': [additional_info]
             }
             github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
             updated_content = github_machine_status_df.to_csv(index=False)
@@ -203,21 +209,21 @@ if __name__ == '__main__':
                                         updated_content,
                                         file_sha,
                                         branch=github_branch)
-            file_sha = file_status.get('commit').sha
+            file_sha = repo.get_contents(github_machine_status_path, ref=github_branch).sha
             # check if process is finish
             process.communicate()
             if process.poll() is None or process.poll() == 0:
                 updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                machine_state = 0
+                machine_state = 3
                 process_id = process.pid
-                addtional_info = 'Done'
+                additional_info = 'Done'
                 new_log = {
-                    'run_id': [uuid],
+                    'uuid': [uuid],
                     'actor': [actor],
                     'last_updated_timestamp': [updated_time],
                     'state': [machine_state],
                     'process_id': [process_id],
-                    'additional_info': [addtional_info]
+                    'additional_info': [additional_info]
                 }
                 github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
                 updated_content = github_machine_status_df.to_csv(index=False)
@@ -226,35 +232,35 @@ if __name__ == '__main__':
                                             updated_content,
                                             file_sha,
                                             branch=github_branch)
-                file_sha = file_status.get('commit').sha
+                file_sha = repo.get_contents(github_machine_status_path, ref=github_branch).sha
                 # write/push result
                 files = Path('./result').glob("*")
                 file_names = [file.name for file in files if file.is_file()]
                 if f'output_{uuid}.txt' in file_names:
                     is_failed = os.path.getsize(f'./result/error_{uuid}.txt') != 0
-                    if is_failed:
-                        state = 'failed'
-                        content_file = f'./result/error_{uuid}.txt' 
-                    else:
-                        state = 'suceeded'
-                        content_file = f'./result/output_{uuid}.txt'
-                    
-                    with open(content_file, 'r') as f:
-                        content = f.read()
-                    
-                    file_status = repo.create_file(f'report/{machine_name}/REPORT_{uuid}.md', f'generate report {uuid}', content, branch=github_branch)
-                    updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    new_log = {
-                        'run_id': [uuid],
-                        'actor': [actor],
-                        'last_updated_timestamp': [updated_time],
-                        'state': [state],
-                        'process_id': [process_id],
-                        'additional_info': [f'report/{machine_name}/REPORT_{uuid}.md']
-                    }
-                    github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
+                if is_failed:
+                    run_state = 'failed'
+                    content_file = f'./result/error_{uuid}.txt' 
+                else:
+                    run_state = 'suceeded'
+                    content_file = f'./result/output_{uuid}.txt'
+                
+                with open(content_file, 'r') as f:
+                    content = f.read()
+                
+                machine_state = 0
+                file_status = repo.create_file(f'report/{machine_name}/REPORT_{uuid}.md', f'generate report {uuid}', content, branch=github_branch)
+                updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                new_log = {
+                    'uuid': [uuid],
+                    'actor': [actor],
+                    'last_updated_timestamp': [updated_time],
+                    'state': [machine_state],
+                    'process_id': [process_id],
+                    'additional_info': [f'report/{machine_name}/REPORT_{uuid}.md']
+                }
+                github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
             
-            github_machine_status_df = github_machine_status_df.sort_values(by='last_updated_timestamp', ascending=False)
             updated_content = github_machine_status_df.to_csv(index=False)
             file_status = repo.update_file(github_machine_status_path,
                                             f'update log for machine {machine_name}',
