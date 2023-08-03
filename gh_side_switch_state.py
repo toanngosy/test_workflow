@@ -67,7 +67,7 @@ def change_machine_status(repo, github_branch, uuid, actor, machine_name):
                        'machine_name': [machine_name],
                        'state': [1],
                        'process_id': [None],
-                       'additional_info': [None]}
+                       'additional_info': ['request']}
             github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
         updated_content = github_machine_status_df.to_csv(index=False)
         file_status = repo.update_file(github_machine_log_path,
