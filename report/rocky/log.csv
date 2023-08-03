@@ -1,3 +1,4 @@
-uuid,actor,last_updated_timestamp,updated_by,machine_name,state,process_id,additional_info
-7ec4736c-e85a-565f-8cfa-bfc72f303a2d,toanngosy,2023-08-03 12:12:07,rocky server,rocky,2,,
-7ec4736c-e85a-565f-8cfa-bfc72f303a2d,toanngosy,2023-08-03 19:11:02,GH Actions,rocky,1,,
+run_id,actor,last_updated_timestamp,state,process_id,additional_info,uuid,updated_by,machine_name
+7ec4736c-e85a-565f-8cfa-bfc72f303a2d,toanngosy,2023-08-03 12:13:08,3,1174749.0,,,,
+,toanngosy,2023-08-03 12:12:07,2,,,7ec4736c-e85a-565f-8cfa-bfc72f303a2d,rocky server,rocky
+,toanngosy,2023-08-03 19:11:02,1,,,7ec4736c-e85a-565f-8cfa-bfc72f303a2d,GH Actions,rocky
