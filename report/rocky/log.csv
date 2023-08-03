@@ -1,4 +1,5 @@
 uuid,actor,last_updated_timestamp,updated_by,machine_name,state,process_id,additional_info
+bc2efa21-1fe4-5f02-a116-707921741e28,toanngosy,2023-08-03 13:14:01,rocky server,rocky,3,1176576,done
 bc2efa21-1fe4-5f02-a116-707921741e28,toanngosy,2023-08-03 13:14:00,rocky server,rocky,3,1176576,running
 bc2efa21-1fe4-5f02-a116-707921741e28,toanngosy,2023-08-03 13:14:00,rocky server,rocky,2,,pending
 bc2efa21-1fe4-5f02-a116-707921741e28,toanngosy,2023-08-03 20:13:32,GH Actions,rocky,1,,
