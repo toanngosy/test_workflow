@@ -46,51 +46,46 @@ if __name__ == '__main__':
     g = Github(github_token)
     repo = g.get_repo(github_repo)
 
+    machine_log_file = MACHINE_LOG_FILE
+    github_machine_log_path = f'report/{machine_name}/{machine_log_file}'
+    try:
+        github_machine_log_contents = repo.get_contents(github_machine_log_path,
+                                                        ref=github_branch)
+        file_sha = github_machine_log_contents.sha
+        content = github_machine_log_contents.content
+        github_machine_log_data = base64.b64decode(content).decode('utf-8')
+    except:
+        csv_headers = 'uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info\n'
+        updated_content = (f'{csv_headers}')
+        updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        status_str = f'create initial log.csv for {machine_name} at {updated_time}.'
+        file_status = repo.create_file(github_machine_log_path,
+                                       f'generate log.csv for machine {machine_name}',
+                                       updated_content,
+                                       branch=github_branch)
+        file_sha = repo.get_contents(github_machine_log_path, ref=github_branch).sha
+
     updated_by = f'{machine_name} server'
     machine_status_file = MACHINE_STATUS_FILE
     github_machine_status_path = f'report/{machine_status_file}'
     try:
         github_machine_status_contents = repo.get_contents(github_machine_status_path,
                                                            ref=github_branch)
-        file_sha = github_machine_status_contents.sha
+        file_status_sha = github_machine_status_contents.sha
         content = github_machine_status_contents.content
         github_machine_status_data = base64.b64decode(content).decode('utf-8')
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
     except:
-        file_sha = None
+        file_status_sha = None
         github_machine_status_data = ''
 
     # 0: pending
     # 1: running
     # 2: done
     # 3: succeed/failed
-    if not file_sha:
+    if not file_status_sha:
         pass
     else:
-        machine_log_file = MACHINE_LOG_FILE
-        github_machine_log_path = f'report/{machine_name}/{machine_log_file}'
-        try:
-            github_machine_log_contents = repo.get_contents(github_machine_log_path,
-                                                            ref=github_branch)
-            file_sha = github_machine_log_contents.sha
-            content = github_machine_log_contents.content
-            github_machine_log_data = base64.b64decode(content).decode('utf-8')
-        except:
-            file_sha = None
-            github_machine_log_data = ''
-        
-        if not file_sha: # log file is not there
-            csv_headers = 'uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info\n'
-            additional_info = 'request'
-            updated_content = (f'{csv_headers}')
-            updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            status_str = f'create initial log.csv for {machine_name} at {updated_time}.'
-            file_status = repo.create_file(github_machine_log_path,
-                                        f'generate log.csv for machine {machine_name}',
-                                        updated_content,
-                                        branch=github_branch)
-
-
         github_machine_log_contents = repo.get_contents(github_machine_log_path,
                                                         ref=github_branch)
         file_sha = github_machine_log_contents.sha
