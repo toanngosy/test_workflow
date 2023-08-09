@@ -11,7 +11,7 @@ import pandas as pd
 import base64
 
 
-MACHINE_LOG_FILE = 'log.csv'
+MACHINE_STATUS_FILE = 'run_status.csv'
 UPDATED_BY = 'GH Actions'
 
 def _create_or_get_branch(repo, github_branch):
@@ -29,8 +29,8 @@ def _create_or_get_branch(repo, github_branch):
 def change_machine_status(repo, github_branch, uuid, actor, machine_name):
     _create_or_get_branch(repo, github_branch)
     updated_by = UPDATED_BY
-    machine_log_file = MACHINE_LOG_FILE
-    github_machine_log_path = f'report/{machine_name}/{machine_log_file}'
+    machine_log_file = MACHINE_STATUS_FILE
+    github_machine_log_path = f'report/{machine_log_file}'
     try:
         github_machine_status_contents = repo.get_contents(github_machine_log_path,
                                                            ref=github_branch)
@@ -43,35 +43,27 @@ def change_machine_status(repo, github_branch, uuid, actor, machine_name):
     
     updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if not file_sha:
-        csv_headers = 'uuid,actor,last_updated_timestamp,updated_by,machine_name,state,process_id,additional_info\n'
-        machine_state = 1
+        csv_headers = 'uuid,actor,last_updated_timestamp,updated_by,additional_info\n'
+        additional_info = 'request'
         updated_content = (f'{csv_headers}'
-                           f'{uuid},{actor},{updated_time},{updated_by},{machine_name},{machine_state},,')
-        status_str = f'Log for machine: {machine_name} is not created. Create and flag machine {machine_name} to run.'
+                           f'{uuid},{actor},{updated_time},{updated_by},{additional_info}')
+        status_str = f'Set all machines to run at {updated_time}.'
         file_status = repo.create_file(github_machine_log_path,
-                                       f'generate log for machine: {machine_name}',
+                                       f'run_status.csv is generated, add new run request.',
                                        updated_content,
                                        branch=github_branch)
     else:
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
-        machine_latest_status = github_machine_status_df.iloc[0]
-        if machine_latest_status.state != 0:
-            status_str = f'Machine: {machine_name} is already flagged to run or occupied at the moment. Abort the request.'
-            return None, status_str
-        else:
-            status_str = f'Machine: {machine_name} is free now, flag to run.'
-            new_log = {'uuid': [uuid],
-                       'actor': [actor],
-                       'last_updated_timestamp': [updated_time],
-                       'updated_by': [updated_by],
-                       'machine_name': [machine_name],
-                       'state': [1],
-                       'process_id': [None],
-                       'additional_info': ['request']}
-            github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
+        status_str = f'run_status.csv is already created, add new run request.'
+        new_log = {'uuid': [uuid],
+                   'actor': [actor],
+                   'last_updated_timestamp': [updated_time],
+                   'updated_by': [updated_by],
+                   'additional_info': ['request']}
+        github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
         updated_content = github_machine_status_df.to_csv(index=False)
         file_status = repo.update_file(github_machine_log_path,
-                                       f'generate machine status',
+                                       f'add new run request',
                                        updated_content,
                                        file_sha,
                                        branch=github_branch)
