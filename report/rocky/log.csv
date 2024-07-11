@@ -1,4 +1,5 @@
 uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info
+9895621256,4548fa19-c682-4eb4-8bba-42cd0cc074c6,toanngosy,2024-07-11 10:10:26,2,596909,done
 9895621256,4548fa19-c682-4eb4-8bba-42cd0cc074c6,toanngosy,2024-07-11 10:08:50,1,596909,running
 9895621256,4548fa19-c682-4eb4-8bba-42cd0cc074c6,toanngosy,2024-07-11 10:08:48,0,,pending
 9895566186,c360bb05-c06d-4982-aea9-f9cd30de647f,toanngosy,2024-07-11 10:05:56,3,596274.0,report/US-ARc/REPORT_283a5b57-5266-4cb4-ad84-990c6b69b3e2.log
