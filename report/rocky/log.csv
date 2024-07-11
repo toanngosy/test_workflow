@@ -1,8 +1,0 @@
-uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info
-9862005579,4262ce94-0674-49de-9686-e4aeaf5a7c52,toanngosy,2024-07-09 11:10:37,2,557389,done
-9862005579,4262ce94-0674-49de-9686-e4aeaf5a7c52,toanngosy,2024-07-09 11:09:02,1,557389,running
-9862005579,4262ce94-0674-49de-9686-e4aeaf5a7c52,toanngosy,2024-07-09 11:09:00,0,,pending
-9861999920,f1b81d06-dd76-4fc4-ade9-274fdcf057fe,toanngosy,2024-07-09 11:08:57,3,556987,report/rocky/REPORT_9861999920_f1b81d06-dd76-4fc4-ade9-274fdcf057fe.log
-9861999920,f1b81d06-dd76-4fc4-ade9-274fdcf057fe,toanngosy,2024-07-09 11:08:54,2,556987,done
-9861999920,f1b81d06-dd76-4fc4-ade9-274fdcf057fe,toanngosy,2024-07-09 11:07:19,1,556987,running
-9861999920,f1b81d06-dd76-4fc4-ade9-274fdcf057fe,toanngosy,2024-07-09 11:07:17,0,,pending
