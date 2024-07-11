@@ -1,4 +1,5 @@
 uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info
+9895369398,62dab8f8-4728-4d83-a3d1-e8fa32cc69f2,toanngosy,2024-07-11 09:49:49,2,595465,done
 9895369398,62dab8f8-4728-4d83-a3d1-e8fa32cc69f2,toanngosy,2024-07-11 09:48:11,1,595465,running
 9895369398,62dab8f8-4728-4d83-a3d1-e8fa32cc69f2,toanngosy,2024-07-11 09:48:09,0,,pending
 9895065067,77b166c2-c24f-4eac-961c-28a722c5753c,toanngosy,2024-07-11 09:44:13,3,594876.0,report/rocky/REPORT_9895065067_77b166c2-c24f-4eac-961c-28a722c5753c.log
