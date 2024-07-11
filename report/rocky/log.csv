@@ -1,3 +1,7 @@
-uuid,actor,last_updated_timestamp,updated_by,additional_info
-9893004112,toanngosy,2024-07-11 14:10:52,GH Actions,request
-9892929433,toanngosy,2024-07-11 14:06:09,GH Actions,request
+uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info
+9893004112,506165d2-92f1-465e-acb1-3f0c2bcbdeca,toanngosy,2024-07-11 07:11:57,1,589054,running
+9893004112,506165d2-92f1-465e-acb1-3f0c2bcbdeca,toanngosy,2024-07-11 07:11:55,0,,pending
+9892929433,3448feeb-6d12-45db-b8e6-0c5111e597ce,toanngosy,2024-07-11 07:08:02,3,588517.0,report/rocky/REPORT_9892929433_3448feeb-6d12-45db-b8e6-0c5111e597ce.log
+9892929433,3448feeb-6d12-45db-b8e6-0c5111e597ce,toanngosy,2024-07-11 07:07:59,2,588517.0,done
+9892929433,3448feeb-6d12-45db-b8e6-0c5111e597ce,toanngosy,2024-07-11 07:06:24,1,588517.0,running
+9892929433,3448feeb-6d12-45db-b8e6-0c5111e597ce,toanngosy,2024-07-11 07:06:22,0,,pending
