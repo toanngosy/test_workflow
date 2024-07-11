@@ -1,1 +1,2 @@
-uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info
+uuid,actor,last_updated_timestamp,updated_by,additional_info
+9896943536,toanngosy,2024-07-11 18:53:51,GH Actions,request
