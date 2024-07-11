@@ -1,2 +1,3 @@
-uuid,actor,last_updated_timestamp,updated_by,additional_info
-9893282370,toanngosy,2024-07-11 14:27:20,GH Actions,request
+uuid,server_uuid,actor,last_updated_timestamp,state,process_id,additional_info
+9893282370,90ed0b21-7400-43e1-95b5-1e3416ca8482,toanngosy,2024-07-11 07:27:50,1,589646,running
+9893282370,90ed0b21-7400-43e1-95b5-1e3416ca8482,toanngosy,2024-07-11 07:27:49,0,,pending
