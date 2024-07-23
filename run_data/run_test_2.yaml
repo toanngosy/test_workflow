@@ -1,0 +1,9 @@
+params:
+  siteid: US-ARc
+  datadir: US-ARc_sample_input
+  log: test_run_name.log
+  firstyear: 2005
+  lastyear: 2006
+custom_params: 
+  recint: hh
+  era-ly: 2014 
