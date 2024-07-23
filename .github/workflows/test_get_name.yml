@@ -4,9 +4,9 @@ run-name: get_new_file_${{inputs.machine_name}}_${{github.actor}}_${{github.run_
 on:
   push:
     branches:
-      - 'report'
+      - 'report/**'
     paths:
-      - 'run_data/**.yaml'
+      - '**.yaml'
 
 jobs:
   get_workflow_result:
