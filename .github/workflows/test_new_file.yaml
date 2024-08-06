@@ -20,6 +20,9 @@ jobs:
         cache: 'pip'
     - name: Install requirements
       run: pip install -r requirements.txt
+    - name: Get the latest changes
+      id: files
+      uses: halaslabs/get-changed-files@v2.2.1
     - name: Get new files
       id: new-run-file
       run: |
