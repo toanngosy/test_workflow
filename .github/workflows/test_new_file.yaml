@@ -26,10 +26,7 @@ jobs:
     - name: Get new files
       id: new-run-file
       run: |
-        CHANGED_FILES=${{steps.files.outputs.all}}
-        echo "new-file=$(echo $CHANGED_FILES)" >> $GITHUB_OUTPUT
-        echo "test-file=${{ github.sha }}" >> $GITHUB_OUTPUT
+        echo "NEW_FILES=${{steps.files.outputs.all}}" >> $GITHUB_OUTPUT
     - name: Echo Output
       run: |
-        echo "New file: ${{steps.new-run-file.outputs.new-file}}" >> $GITHUB_STEP_SUMMARY
-        echo "New file: ${{steps.new-run-file.outputs.test-file}}" >> $GITHUB_STEP_SUMMARY
+        echo "${{steps.new-run-file.outputs.NEW_FILES}}" >> $GITHUB_STEP_SUMMARY
