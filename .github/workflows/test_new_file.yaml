@@ -27,7 +27,8 @@ jobs:
       id: new-run-file
       run: |
         CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
-        echo "NEW_FILES=$CHANGED_FILES" >> $GITHUB_OUTPUT
+        echo "new-file=$(echo $CHANGED_FILES)" >> $GITHUB_OUTPUT
+        shell: bash
     - name: Echo Output
       run: |
-        echo "New file: ${{steps.new-run-file.outputs.NEW_FILES}}" >> $GITHUB_STEP_SUMMARY
+        echo "New file: ${{steps.new-run-file.outputs.new-file}}" >> $GITHUB_STEP_SUMMARY
