@@ -3,10 +3,8 @@ run-name: get_new_file_${{inputs.machine_name}}_${{github.actor}}_${{github.run_
 
 on:
   push:
-    branches:
-      - 'report/**'
-    paths:
-      - '**.yaml'
+    branches: ['report']
+    paths: ['run_data/**.yaml']
 
 jobs:
   get_workflow_result:
