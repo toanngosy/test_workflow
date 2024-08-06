@@ -5,8 +5,6 @@ on:
   push:
     branches: 
       report
-    paths: 
-      run_data/**.yaml
 
 jobs:
   get_workflow_result:
