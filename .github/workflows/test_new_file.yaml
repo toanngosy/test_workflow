@@ -28,11 +28,6 @@ jobs:
       run: |
         CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
         new_files=$(echo "$CHANGED_FILES" | grep "run_data")
-        echo "NEW_FILES=$new_files" >> $GITHUB_OUTPUT
-      env:
-        TOKEN: ${{secrets.token}}
-        REPO: toanngosy/test_workflow
-        BRANCH: report
     - name: Echo Output
       run: |
         echo "New file: ${{steps.new-run-file.outputs.NEW_FILES}}" >> $GITHUB_STEP_SUMMARY
