@@ -28,6 +28,8 @@ jobs:
       run: |
         CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
         echo "new-file=$(echo $CHANGED_FILES)" >> $GITHUB_OUTPUT
+        echo "test-file=${{ github.sha }}" >> $GITHUB_OUTPUT
     - name: Echo Output
       run: |
         echo "New file: ${{steps.new-run-file.outputs.new-file}}" >> $GITHUB_STEP_SUMMARY
+        echo "New file: ${{steps.new-run-file.outputs.test-file}}" >> $GITHUB_STEP_SUMMARY
