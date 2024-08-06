@@ -1,0 +1,27 @@
+name: Run intensive task auto
+run-name: intensive-task_auto_${{github.run_id}}
+
+on:
+  workflow_run:
+    workflows: ["Get new file"]
+    types: [completed]
+    branches:
+     - report
+jobs:
+  get_workflow_result:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    - name: Install requirements
+      run: pip install -r requirements.txt
+    - name: Wait for acknowledge signal
+      id: ack-signal
+      run: |
+        report_url=$(python gh_side_inf_loop.py)
