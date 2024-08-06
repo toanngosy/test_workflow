@@ -4,8 +4,9 @@ run-name: intensive-task_auto_${{github.run_id}}
 on:
   workflow_run:
     workflows: ["Get new file"]
-    types:
-      - completed
+    types: [completed]
+    branches:
+     - report
 jobs:
   get_workflow_result:
     runs-on: ubuntu-latest
@@ -21,6 +22,6 @@ jobs:
     - name: Install requirements
       run: pip install -r requirements.txt
     - name: Wait for acknowledge signal
-      id: ack-rsignal
+      id: ack-signal
       run: |
         report_url=$(python gh_side_inf_loop.py)
