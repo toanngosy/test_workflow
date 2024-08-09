@@ -89,4 +89,4 @@ if __name__ == '__main__':
     repo = g.get_repo(github_repo)
     _, status_str = change_machine_status(repo, github_branch, actor, machine_name, file_path)
     
-    print(f'Github Actions Run ID {run_id} status: {status_str}')
+    print(f'Status: {status_str}')
