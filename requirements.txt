@@ -2,3 +2,4 @@ PyGithub
 python-dotenv
 pytz
 PyYAML
+pandas
