@@ -81,12 +81,12 @@ def change_machine_status(repo, github_branch, actor, machine_name, file_path):
 
 
 if __name__ == '__main__':
-    _, run_id, actor, machine_name = sys.argv
+    _, actor, machine_name, file_path = sys.argv
     github_token = os.environ.get('TOKEN')
     github_repo = os.environ.get('REPO')
     github_branch = os.environ.get('BRANCH')
     g = Github(github_token)
     repo = g.get_repo(github_repo)
-    _, status_str = change_machine_status(repo, github_branch, run_id, actor, machine_name)
+    _, status_str = change_machine_status(repo, github_branch, actor, machine_name, file_path)
     
     print(f'Github Actions Run ID {run_id} status: {status_str}')
