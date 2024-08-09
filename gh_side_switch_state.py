@@ -81,7 +81,7 @@ def change_machine_status(repo, github_branch, actor, machine_name, file_path):
 
 
 if __name__ == '__main__':
-    _, actor, machine_name, file_path = sys.argv
+    actor, machine_name, file_path = sys.argv
     github_token = os.environ.get('TOKEN')
     github_repo = os.environ.get('REPO')
     github_branch = os.environ.get('BRANCH')
