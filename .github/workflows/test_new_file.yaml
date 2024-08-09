@@ -27,6 +27,16 @@ jobs:
       id: new-run-file
       run: |
         echo "NEW_FILES=${{steps.files.outputs.all}}" >> $GITHUB_OUTPUT
+    - name: Switch status
+      id: switch-status
+      run: |
+        switch_state_status=$(python gh_side_switch_state.py ${{github.actor}} ${{github.event.inputs.machine_name}} ${{steps.new-run-file.outputs.NEW_FILES}})
+        echo "STATE_SUMMARY=$switch_state_status" >> $GITHUB_OUTPUT
+      env:
+        TOKEN: ${{secrets.token}}
+        REPO: toanngosy/test_workflow
+        BRANCH: report
     - name: Echo Output
       run: |
-        echo "${{steps.new-run-file.outputs.NEW_FILES}}" >> $GITHUB_STEP_SUMMARY
+        echo "Switch state: ${{steps.switch-status.outputs.STATE_SUMMARY}}"
+        echo "Switch state: ${{steps.switch-status.outputs.STATE_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
