@@ -9,6 +9,7 @@ import datetime as dt
 import io
 import pandas as pd
 import base64
+from uuid import uuid4
 
 
 MACHINE_STATUS_FILE = 'run_status.csv'
@@ -26,7 +27,7 @@ def _create_or_get_branch(repo, github_branch):
         repo.create_git_ref(f'refs/heads/{github_branch}', base_commit.sha)
 
 
-def change_machine_status(repo, github_branch, uuid, actor, machine_name):
+def change_machine_status(repo, github_branch, actor, machine_name, file_path):
     _create_or_get_branch(repo, github_branch)
     updated_by = UPDATED_BY
     machine_log_file = MACHINE_STATUS_FILE
@@ -42,24 +43,32 @@ def change_machine_status(repo, github_branch, uuid, actor, machine_name):
         github_machine_status_data = ''
     
     updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    file_path_list = file_path.split()
     if not file_sha:
-        csv_headers = 'uuid,actor,last_updated_timestamp,updated_by,additional_info\n'
+        csv_headers = 'uuid,actor,last_updated_timestamp,updated_by,file_path,additional_info\n'
         additional_info = 'request'
-        updated_content = (f'{csv_headers}'
-                           f'{uuid},{actor},{updated_time},{updated_by},{additional_info}')
+        updated_content = f'{csv_headers}'
+        for f in file_path_list:
+            uuid = str(uuid4())
+            updated_content += f'{uuid},{actor},{updated_time},{updated_by},{f},{additional_info}\n'
+        updated_content.strip('\n')
         status_str = f'Set all machines to run at {updated_time}.'
         file_status = repo.create_file(github_machine_log_path,
                                        f'run_status.csv is generated, add new run request.',
                                        updated_content,
                                        branch=github_branch)
     else:
+        additional_info = 'request'
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
         status_str = f'run_status.csv is already created, add new run request.'
-        new_log = {'uuid': [uuid],
-                   'actor': [actor],
-                   'last_updated_timestamp': [updated_time],
-                   'updated_by': [updated_by],
-                   'additional_info': ['request']}
+        new_log = {}
+        for f in file_path_list:
+            new_log.setdefault('uuid', []).append(str(uuid4()))
+            new_log.setdefault('actor', []).append(actor)
+            new_log.setdefault('last_updated_timestamp', []).append(updated_time)
+            new_log.setdefault('updated_by', []).append(updated_by)
+            new_log.setdefault('file_path', []).append(f)
+            new_log.setdefault('additional_info', []).append(additional_info)
         github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
         updated_content = github_machine_status_df.to_csv(index=False)
         file_status = repo.update_file(github_machine_log_path,
