@@ -45,12 +45,11 @@ def change_machine_status(repo, github_branch, actor, machine_name, file_path):
     updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     file_path_list = file_path.split()
     if not file_sha:
-        csv_headers = 'uuid,actor,last_updated_timestamp,updated_by,file_path,additional_info\n'
-        additional_info = 'request'
+        csv_headers = 'uuid,actor,last_updated_timestamp,updated_by,file_path\n'
         updated_content = f'{csv_headers}'
         for f in file_path_list:
             uuid = str(uuid4())
-            updated_content += f'{uuid},{actor},{updated_time},{updated_by},{f},{additional_info}\n'
+            updated_content += f'{uuid},{actor},{updated_time},{updated_by},{f}\n'
         updated_content.strip('\n')
         status_str = f'Set all machines to run at {updated_time}.'
         file_status = repo.create_file(github_machine_log_path,
@@ -58,7 +57,6 @@ def change_machine_status(repo, github_branch, actor, machine_name, file_path):
                                        updated_content,
                                        branch=github_branch)
     else:
-        additional_info = 'request'
         github_machine_status_df = pd.read_csv(io.StringIO(github_machine_status_data))
         status_str = f'run_status.csv is already created, add new run request.'
         new_log = {}
@@ -68,7 +66,6 @@ def change_machine_status(repo, github_branch, actor, machine_name, file_path):
             new_log.setdefault('last_updated_timestamp', []).append(updated_time)
             new_log.setdefault('updated_by', []).append(updated_by)
             new_log.setdefault('file_path', []).append(f)
-            new_log.setdefault('additional_info', []).append(additional_info)
         github_machine_status_df = pd.concat([pd.DataFrame(new_log), github_machine_status_df])
         updated_content = github_machine_status_df.to_csv(index=False)
         file_status = repo.update_file(github_machine_log_path,
