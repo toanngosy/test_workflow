@@ -27,7 +27,7 @@ def _create_or_get_branch(repo, github_branch):
         repo.create_git_ref(f'refs/heads/{github_branch}', base_commit.sha)
 
 
-def change_machine_status(repo, github_branch, actor, machine_name, file_path):
+def change_machine_status(repo, github_branch, actor, file_path):
     _create_or_get_branch(repo, github_branch)
     updated_by = UPDATED_BY
     machine_log_file = MACHINE_STATUS_FILE
@@ -78,12 +78,12 @@ def change_machine_status(repo, github_branch, actor, machine_name, file_path):
 
 
 if __name__ == '__main__':
-    actor, machine_name, file_path = sys.argv
+    _, actor, file_path = sys.argv
     github_token = os.environ.get('TOKEN')
     github_repo = os.environ.get('REPO')
     github_branch = os.environ.get('BRANCH')
     g = Github(github_token)
     repo = g.get_repo(github_repo)
-    _, status_str = change_machine_status(repo, github_branch, actor, machine_name, file_path)
+    _, status_str = change_machine_status(repo, github_branch, actor, file_path)
     
-    print(f'Status: {status_str} / {sys.argv}')
+    print(f'Status: {status_str}')
