@@ -6,9 +6,6 @@ import requests
 import yaml
 
 from dotenv import load_dotenv
-<<<<<<< Updated upstream
-from github import Github, GithubException
-=======
 from github import Github, GithubException, InputGitTreeElement
 import base64
 import pandas as pd
@@ -20,7 +17,6 @@ from uuid import uuid4
 import time
 from base64 import b64encode
 import yaml
->>>>>>> Stashed changes
 
 
 def run_data_intensive_process():
