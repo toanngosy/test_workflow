@@ -1,5 +1,5 @@
-run:
-  - machine: rocky
+- machine: rocky
+  runs: 
     - params:
         siteid: US-ARc
         datadir: US-ARc_sample_input
