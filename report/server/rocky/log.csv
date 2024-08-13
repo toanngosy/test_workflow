@@ -1,3 +1,1 @@
-uuid,actor,file_path,last_updated_timestamp,state,process_id,additional_info
-2ef75b35-3d27-470f-9abe-99417b4f70b9-8e277af4-3db9-4de2-b4c4-4175c2b70674,toanngosy,run_data/test_data.yaml,2024-08-12 08:15:17,0,,pending
-2ef75b35-3d27-470f-9abe-99417b4f70b9-7393312e-8fc6-455e-8a63-e23ce1c1072c,toanngosy,run_data/test_data.yaml,2024-08-12 08:16:11,0,,pending
+uuid,index,actor,file_path,last_updated_timestamp,state,process_id,additional_info
