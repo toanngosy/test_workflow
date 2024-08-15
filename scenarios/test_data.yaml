@@ -1,5 +1,5 @@
 - machine: rocky
-  runs: 
+  scenarios: 
     - params:
         siteid: US-ARc
         datadir: US-ARc_sample_input
