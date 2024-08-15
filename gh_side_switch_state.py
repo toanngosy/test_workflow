@@ -12,7 +12,7 @@ import base64
 from uuid import uuid4
 
 
-SCENARIO_FILE = 'scenarios.csv'
+SCENARIO_FILE = 'scenario.csv'
 UPDATED_BY = 'GH Actions'
 
 def _create_or_get_branch(repo, github_branch):
