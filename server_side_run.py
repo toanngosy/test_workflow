@@ -17,8 +17,6 @@ import time
 import yaml
 
 
-RUN_STATUS_FILE = 'run_status.csv'
-
 # oneflux_path = '/home/portnoy/u0/sytoanngo/ONEFlux'
 # oneflux_input = '/home/portnoy/u0/sytoanngo/ONEFlux/data/US-ARc_sample_input'
 # oneflux_log = 'test_run_name.log'
@@ -41,7 +39,7 @@ class FlowManager:
         try:
             contents = self.repo.get_contents(log_path,
                                               ref=self.branch)
-            sha = contents.sha
+            file_sha = contents.sha
             content = contents.content
             status_str = get_log_str
             data = base64.b64decode(content).decode('utf-8')
@@ -50,9 +48,9 @@ class FlowManager:
             updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             status_str = create_new_log_str.format(updated_time=updated_time)
             file_status = self.repo.create_file(log_path,
-                                           status_str,
-                                           csv_header,
-                                           branch=self.branch)
+                                                status_str,
+                                                csv_header,
+                                                branch=self.branch)
             time.sleep(1)
             contents = self.repo.get_contents(log_path,
                                              ref=self.branch)

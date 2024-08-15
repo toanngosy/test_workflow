@@ -6,7 +6,7 @@ on:
     branches: 
       report
     paths:
-      run_data/**.yaml
+      scenarios/**.yaml
 jobs:
   get_workflow_result:
     runs-on: ubuntu-latest
@@ -24,13 +24,13 @@ jobs:
       id: files
       uses: halaslabs/get-changed-files@v2.2.1
     - name: Get new files
-      id: new-run-file
+      id: new-scenario-file
       run: |
         echo "NEW_FILES=${{steps.files.outputs.all}}" >> $GITHUB_OUTPUT
     - name: Switch status
       id: switch-status
       run: |
-        switch_state_status=$(python gh_side_switch_state.py ${{github.actor}} ${{steps.new-run-file.outputs.NEW_FILES}})
+        switch_state_status=$(python gh_side_switch_state.py ${{github.actor}} ${{steps.new-scenario-file.outputs.NEW_FILES}})
         echo "STATE_SUMMARY=$switch_state_status" >> $GITHUB_OUTPUT
       env:
         TOKEN: ${{secrets.token}}
