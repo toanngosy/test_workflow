@@ -1,5 +1,0 @@
-uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,file_path
-2ef75b35-3d27-470f-9abe-99417b4f70b9,1,toanngosy,2024-08-27 06:48:44,1,1126027.0,running,7eb55af4-a904-4a63-aab1-4e39451f9b42,
-2ef75b35-3d27-470f-9abe-99417b4f70b9,0,toanngosy,2024-08-27 06:48:41,1,1126000.0,running,a2f54756-eaeb-4559-a1a4-fded18da2230,
-2ef75b35-3d27-470f-9abe-99417b4f70b9,0,toanngosy,2024-08-27 06:08:53,0,,pending,,scenarios/test_data.yaml
-2ef75b35-3d27-470f-9abe-99417b4f70b9,1,toanngosy,2024-08-27 06:08:53,0,,pending,,scenarios/test_data.yaml
