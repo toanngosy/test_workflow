@@ -1,3 +1,4 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,process_id
-2ef75b35-3d27-470f-9abe-99417b4f70b9,0,toanngosy,scenarios/test_data.yaml,2024-08-27 04:43:27,0,pending,
-2ef75b35-3d27-470f-9abe-99417b4f70b9,1,toanngosy,scenarios/test_data.yaml,2024-08-27 04:43:27,0,pending,
+uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,file_path
+2ef75b35-3d27-470f-9abe-99417b4f70b9,0,toanngosy,2024-08-27 05:56:08,1,1120960.0,running,
+2ef75b35-3d27-470f-9abe-99417b4f70b9,0,toanngosy,2024-08-27 04:43:27,0,,pending,scenarios/test_data.yaml
+2ef75b35-3d27-470f-9abe-99417b4f70b9,1,toanngosy,2024-08-27 04:43:27,0,,pending,scenarios/test_data.yaml
