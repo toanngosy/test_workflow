@@ -1,5 +1,6 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
-6694dc3f-b551-4c75-bb80-765a1a96ab59,0,toanngosy,scenarios/test_data.yaml,2024-08-27 14:27:25,0,pending,,US-ARc,US-ARc_sample_input,
-6694dc3f-b551-4c75-bb80-765a1a96ab59,1,toanngosy,scenarios/test_data.yaml,2024-08-27 14:27:25,0,pending,,bad_siteid,bad_datadir,
-9e27af17-99dd-4c49-84d5-298c3710b8e3,0,toanngosy,scenarios/test_data.yaml,2024-08-27 14:27:25,0,pending,,US-ARc,US-ARc_sample_input,
-9e27af17-99dd-4c49-84d5-298c3710b8e3,1,toanngosy,scenarios/test_data.yaml,2024-08-27 14:27:25,0,pending,,bad_siteid,bad_datadir,
+uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+6694dc3f-b551-4c75-bb80-765a1a96ab59,0,toanngosy,2024-08-27 14:27:31,1,1141111.0,running,20fef87a-80e2-4ca4-9397-f284190006d8,US-ARc,US-ARc_sample_input,
+6694dc3f-b551-4c75-bb80-765a1a96ab59,0,toanngosy,2024-08-27 14:27:25,0,,pending,,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
+6694dc3f-b551-4c75-bb80-765a1a96ab59,1,toanngosy,2024-08-27 14:27:25,0,,pending,,bad_siteid,bad_datadir,scenarios/test_data.yaml
+9e27af17-99dd-4c49-84d5-298c3710b8e3,0,toanngosy,2024-08-27 14:27:25,0,,pending,,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
+9e27af17-99dd-4c49-84d5-298c3710b8e3,1,toanngosy,2024-08-27 14:27:25,0,,pending,,bad_siteid,bad_datadir,scenarios/test_data.yaml
