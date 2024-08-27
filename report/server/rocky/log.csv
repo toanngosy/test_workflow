@@ -1,7 +1,3 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
-c887fcb8-91d1-4642-b9ce-df95050082fa,0,toanngosy,2024-08-27 11:15:34,2,1139172.0,report/US-ARc/REPORT_9dd5b293-f163-4a45-b00e-7cdc1697f129.log,9dd5b293-f163-4a45-b00e-7cdc1697f129,US-ARc,US-ARc_sample_input,
-c887fcb8-91d1-4642-b9ce-df95050082fa,1,toanngosy,2024-08-27 11:13:58,3,1139205.0,failed,4edff326-6b2d-4cce-b271-63a3843fa00d,bad_siteid,bad_datadir,
-c887fcb8-91d1-4642-b9ce-df95050082fa,1,toanngosy,2024-08-27 11:13:56,1,1139205.0,running,4edff326-6b2d-4cce-b271-63a3843fa00d,bad_siteid,bad_datadir,
-c887fcb8-91d1-4642-b9ce-df95050082fa,0,toanngosy,2024-08-27 11:13:54,1,1139172.0,running,9dd5b293-f163-4a45-b00e-7cdc1697f129,US-ARc,US-ARc_sample_input,
 c887fcb8-91d1-4642-b9ce-df95050082fa,0,toanngosy,2024-08-27 10:04:42,0,,pending,,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
 c887fcb8-91d1-4642-b9ce-df95050082fa,1,toanngosy,2024-08-27 10:04:42,0,,pending,,bad_siteid,bad_datadir,scenarios/test_data.yaml
