@@ -1,7 +1,9 @@
-uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
-5dae10c6-769b-48e6-a632-44b268823787,0,toanngosy,2024-08-27 09:54:18,2,1135996.0,report/US-ARc/REPORT_b43d38cd-59e8-458e-8038-9e8d3ff8d362.log,b43d38cd-59e8-458e-8038-9e8d3ff8d362,US-ARc,US-ARc_sample_input,
-5dae10c6-769b-48e6-a632-44b268823787,1,toanngosy,2024-08-27 09:52:41,3,1136030.0,failed,2f44c339-2948-495f-b304-92e1b6b9047b,bad_siteid,bad_datadir,
-5dae10c6-769b-48e6-a632-44b268823787,1,toanngosy,2024-08-27 09:52:39,1,1136030.0,running,2f44c339-2948-495f-b304-92e1b6b9047b,bad_siteid,bad_datadir,
-5dae10c6-769b-48e6-a632-44b268823787,0,toanngosy,2024-08-27 09:52:37,1,1135996.0,running,b43d38cd-59e8-458e-8038-9e8d3ff8d362,US-ARc,US-ARc_sample_input,
-5dae10c6-769b-48e6-a632-44b268823787,0,toanngosy,2024-08-27 09:52:36,0,,pending,,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
-5dae10c6-769b-48e6-a632-44b268823787,1,toanngosy,2024-08-27 09:52:36,0,,pending,,bad_siteid,bad_datadir,scenarios/test_data.yaml
+uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
+09d7632a-ffcc-4836-b402-f7739b53d626,0,toanngosy,scenarios/test_data.yaml,2024-08-27 09:57:31,0,pending,,US-ARc,US-ARc_sample_input,
+09d7632a-ffcc-4836-b402-f7739b53d626,1,toanngosy,scenarios/test_data.yaml,2024-08-27 09:57:31,0,pending,,bad_siteid,bad_datadir,
+5dae10c6-769b-48e6-a632-44b268823787,0,toanngosy,,2024-08-27 09:54:18,2,report/US-ARc/REPORT_b43d38cd-59e8-458e-8038-9e8d3ff8d362.log,b43d38cd-59e8-458e-8038-9e8d3ff8d362,US-ARc,US-ARc_sample_input,1135996.0
+5dae10c6-769b-48e6-a632-44b268823787,1,toanngosy,,2024-08-27 09:52:41,3,failed,2f44c339-2948-495f-b304-92e1b6b9047b,bad_siteid,bad_datadir,1136030.0
+5dae10c6-769b-48e6-a632-44b268823787,1,toanngosy,,2024-08-27 09:52:39,1,running,2f44c339-2948-495f-b304-92e1b6b9047b,bad_siteid,bad_datadir,1136030.0
+5dae10c6-769b-48e6-a632-44b268823787,0,toanngosy,,2024-08-27 09:52:37,1,running,b43d38cd-59e8-458e-8038-9e8d3ff8d362,US-ARc,US-ARc_sample_input,1135996.0
+5dae10c6-769b-48e6-a632-44b268823787,0,toanngosy,scenarios/test_data.yaml,2024-08-27 09:52:36,0,pending,,US-ARc,US-ARc_sample_input,
+5dae10c6-769b-48e6-a632-44b268823787,1,toanngosy,scenarios/test_data.yaml,2024-08-27 09:52:36,0,pending,,bad_siteid,bad_datadir,
