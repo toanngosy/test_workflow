@@ -1,1 +1,3 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir
+uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
+dcf521fa-b82a-4a91-9973-fa9d75d58a13,0,toanngosy,scenarios/test_data.yaml,2024-08-27 09:43:28,0,pending,,US-ARc,US-ARc_sample_input,
+dcf521fa-b82a-4a91-9973-fa9d75d58a13,1,toanngosy,scenarios/test_data.yaml,2024-08-27 09:43:28,0,pending,,bad_siteid,bad_datadir,
