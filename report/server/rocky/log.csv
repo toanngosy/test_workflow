@@ -1,4 +1,5 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+2ef75b35-3d27-470f-9abe-99417b4f70b9,1,toanngosy,2024-08-27 08:51:49,2,1130602.0,report/US-ARc/REPORT_45d11d8c-57da-48be-8981-3ee96082f03d.log,45d11d8c-57da-48be-8981-3ee96082f03d,US-ARc,45d11d8c-57da-48be-8981-3ee96082f03d,
 2ef75b35-3d27-470f-9abe-99417b4f70b9,1,toanngosy,2024-08-27 08:49:30,1,1130602.0,running,45d11d8c-57da-48be-8981-3ee96082f03d,US-ARc,US-ARc_sample_input,
 2ef75b35-3d27-470f-9abe-99417b4f70b9,0,toanngosy,2024-08-27 08:49:24,1,1130553.0,running,83403b51-286c-4315-ac57-b7ce4bef87f5,US-ARc,US-ARc_sample_input,
 2ef75b35-3d27-470f-9abe-99417b4f70b9,0,toanngosy,2024-08-27 08:18:12,0,,pending,,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
