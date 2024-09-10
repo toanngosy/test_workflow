@@ -5,8 +5,6 @@ on:
   push:
     paths:
       - 'scenarios/**.yaml'
-    paths-ignore:
-      - '!scenarios/**'
 
 jobs:
   get_workflow_result:
@@ -14,21 +12,39 @@ jobs:
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+
+    - name: Check for added or modified files
+      id: check_files
+      run: |
+        git diff --name-status HEAD^ HEAD | grep -E "^[AM].*scenarios/.*\.yaml$" || echo "No relevant changes"
+        echo "has_changes=$(git diff --name-status HEAD^ HEAD | grep -E "^[AM].*scenarios/.*\.yaml$" | wc -l)" >> $GITHUB_OUTPUT
+
     - name: Setup Python
+      if: steps.check_files.outputs.has_changes != '0'
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
         cache: 'pip'
+
     - name: Install requirements
+      if: steps.check_files.outputs.has_changes != '0'
       run: pip install -r requirements.txt
+
     - name: Get the latest changes
+      if: steps.check_files.outputs.has_changes != '0'
       id: files
       uses: halaslabs/get-changed-files@v2.2.1
+
     - name: Get new files
+      if: steps.check_files.outputs.has_changes != '0'
       id: new-scenario-file
       run: |
         echo "NEW_FILES=${{steps.files.outputs.all}}" >> $GITHUB_OUTPUT
+
     - name: Switch status
+      if: steps.check_files.outputs.has_changes != '0'
       id: switch-status
       run: |
         switch_state_status=$(python gh_side_switch_state.py ${{github.actor}} ${{steps.new-scenario-file.outputs.NEW_FILES}})
@@ -37,7 +53,9 @@ jobs:
         TOKEN: ${{secrets.token}}
         REPO: toanngosy/test_workflow
         BRANCH: report
+
     - name: Echo Output
+      if: steps.check_files.outputs.has_changes != '0'
       run: |
         echo "Switch state: ${{steps.switch-status.outputs.STATE_SUMMARY}}"
         echo "Switch state: ${{steps.switch-status.outputs.STATE_SUMMARY}}" >> $GITHUB_STEP_SUMMARY
