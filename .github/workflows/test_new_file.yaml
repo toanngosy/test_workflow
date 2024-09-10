@@ -3,10 +3,11 @@ run-name: get_new_file_${{github.actor}}_${{github.run_id}}
 
 on:
   push:
-    branches: 
-      report
     paths:
-      scenarios/**.yaml
+      - 'scenarios/**.yaml'
+    paths-ignore:
+      - '!scenarios/**'
+
 jobs:
   get_workflow_result:
     runs-on: ubuntu-latest
