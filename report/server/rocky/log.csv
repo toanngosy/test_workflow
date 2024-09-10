@@ -1,3 +1,4 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
-9a0d484d-a9a8-4337-a04b-c4084d4d54bf,0,toanngosy,scenarios/test_data.yaml,2024-09-10 10:11:47,0,pending,,US-ARc,US-ARc_sample_input,
-9a0d484d-a9a8-4337-a04b-c4084d4d54bf,1,toanngosy,scenarios/test_data.yaml,2024-09-10 10:11:47,0,pending,,bad_siteid,bad_datadir,
+uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+9a0d484d-a9a8-4337-a04b-c4084d4d54bf,0,toanngosy,2024-09-10 10:11:48,1,1273235.0,running,36123b23-b425-4e52-91e1-6bf16b773780,US-ARc,US-ARc_sample_input,
+9a0d484d-a9a8-4337-a04b-c4084d4d54bf,0,toanngosy,2024-09-10 10:11:47,0,,pending,,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
+9a0d484d-a9a8-4337-a04b-c4084d4d54bf,1,toanngosy,2024-09-10 10:11:47,0,,pending,,bad_siteid,bad_datadir,scenarios/test_data.yaml
