@@ -1,4 +1,5 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-13 07:42:18,3,1329534.0,failed,765bbb66-97fd-4a73-b269-b3de918fbdf3,US-ARc,US-ARc_sample_input,
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-13 07:42:16,3,1330816.0,failed,78b62c1e-3503-4580-829b-04f7f7fe6cc1,US-ARc,US-ARc_sample_input,
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-13 07:42:14,3,1330957.0,failed,0753a5fb-2494-44be-a432-a530ce92378d,US-ARc,US-ARc_sample_input,
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-13 07:42:12,1,1331137.0,running,8675e489-2202-4470-b5e2-c28625358503,US-ARc,US-ARc_sample_input,
