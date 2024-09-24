@@ -1,4 +1,0 @@
-2024-09-11 10:53:55.836 [INFO    ] Logging started [root]
-2024-09-11 10:53:55.836 [DEBUG   ] Using:command (all), data-dir (/home/portnoy/u0/sytoanngo/ONEFlux/data), site-id (US-ARc), site-dir (US-ARc_sample_input), first-year (2005), last-year (2006), perc (['1.25', '3.75', '6.25', '8.75', '11.25', '13.75', '16.25', '18.75', '21.25', '23.75', '26.25', '28.75', '31.25', '33.75', '36.25', '38.75', '41.25', '43.75', '46.25', '48.75', '51.25', '53.75', '56.25', '58.75', '61.25', '63.75', '66.25', '68.75', '71.25', '73.75', '76.25', '78.75', '81.25', '83.75', '86.25', '88.75', '91.25', '93.75', '96.25', '98.75', '50']), prod (['c', 'y']), log-file (/home/portnoy/u0/sytoanngo/ONEFlux/fe7a2d32-6aa8-427b-a480-f88608cdfad7.log), force-py (False), versionp (5), versiond (beta), era-fy (1989), era-ly (2014) [__main__]
-2024-09-11 10:53:55.836 [INFO    ] Starting execution: all [__main__]
-2024-09-11 10:53:55.836 [INFO    ] Finished execution: all [__main__]
