@@ -1,4 +1,5 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-24 14:10:06,3,1461781.0,failed code/data,4c789600-2537-4843-9640-7dfb2983ef15,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-24 14:10:04,1,1461781.0,running,4c789600-2537-4843-9640-7dfb2983ef15,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-24 14:08:10,4,1461560.0,failed,3420b049-15c2-4f58-b010-8f94d360f4cd,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2024-09-24 14:08:08,1,1461560.0,running,3420b049-15c2-4f58-b010-8f94d360f4cd,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
