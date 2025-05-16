@@ -315,22 +315,57 @@ class FlowManager:
 
     def upload_run_result(self, site_id, data_dir, run_uuid):
         try:
+            # Upload original log file
             content_file = Path(self.oneflux_path)/f'{run_uuid}.log'
             with open(content_file, 'r') as f:
                 content = f.read()
             file_status = self.repo.create_file(f'report/{site_id}/{run_uuid}/REPORT.log',
                                                 f'generate report {run_uuid}',
                                                 content, branch=self.branch)
-            updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            additional_info = f'report/{site_id}/REPORT_{run_uuid}.log'
             
-            output_img_path = Path(self.oneflux_path)/'data'/data_dir/'99_fluxnet2015'
-            png_files = list(output_img_path.glob('*.png'))
+            # Get the job ID from the machine log to find the specific SLURM output files
+            machine_log_df, _ = self.get_machine_log()
+            job_row = machine_log_df[(machine_log_df['run_uuid'] == run_uuid) & 
+                                     (machine_log_df['site_id'] == site_id)].iloc[0]
+            slurm_job_id = job_row['process_id']
+            
+            # Define the paths to SLURM output files based on the job ID
+            slurm_out_file = Path(self.oneflux_path)/f"{slurm_job_id}.out"
+            slurm_err_file = Path(self.oneflux_path)/f"{slurm_job_id}.err"
+            slurm_files = []
+            
+            if slurm_out_file.exists():
+                slurm_files.append(slurm_out_file)
+            if slurm_err_file.exists():
+                slurm_files.append(slurm_err_file)
+            
+            # Prepare for uploading both log files and image files
             element_list = list()
             master_ref = self.repo.get_git_ref(f'heads/{self.branch}')
             master_sha = master_ref.object.sha
             base_tree = self.repo.get_git_tree(master_sha)
-            commit_message = 'test upload images'
+            commit_message = f'Upload results for job {run_uuid}'
+            
+            # Upload SLURM output files
+            for slurm_file in slurm_files:
+                file_name = slurm_file.name
+                with open(slurm_file, 'r') as f:
+                    data = f.read()
+                
+                # Create blob and add to element list for commit
+                blob = self.repo.create_git_blob(data, 'base64')
+                element = InputGitTreeElement(
+                    path=f'report/{site_id}/{run_uuid}/{file_name}',
+                    mode='100644',
+                    type='blob',
+                    sha=blob.sha
+                )
+                element_list.append(element)
+            
+            # Continue with uploading image files
+            output_img_path = Path(self.oneflux_path)/'data'/data_dir/'99_fluxnet2015'
+            png_files = list(output_img_path.glob('*.png'))
+            
             for entry in png_files:
                 path_in_repo = Path(entry).name
                 entry = str(entry)
@@ -339,14 +374,26 @@ class FlowManager:
                 if entry.endswith('.png'):
                     data = base64.b64encode(data).decode('utf-8')
                 blob = self.repo.create_git_blob(data, 'base64')
-                element = InputGitTreeElement(path=f'report/{site_id}/{run_uuid}/{path_in_repo}', mode='100644', type='blob', sha=blob.sha)
+                element = InputGitTreeElement(
+                    path=f'report/{site_id}/{run_uuid}/{path_in_repo}',
+                    mode='100644',
+                    type='blob',
+                    sha=blob.sha
+                )
                 element_list.append(element)
+            
+            # Commit all files together
             tree = self.repo.create_git_tree(element_list, base_tree)
             parent = self.repo.get_git_commit(master_sha)
             commit = self.repo.create_git_commit(commit_message, tree, [parent])
             master_ref.edit(commit.sha)
+            
+            updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            additional_info = f'report/{site_id}/REPORT_{run_uuid}.log'
+            
             return True, additional_info
-        except:
+        except Exception as e:
+            log.error(f"Error uploading results: {e}")
             return False, None
 
     def get_run_state(self, machine_log_df):
