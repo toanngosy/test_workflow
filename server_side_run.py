@@ -4,6 +4,7 @@ import os
 import random
 import requests
 import yaml
+import re
 
 from dotenv import load_dotenv
 from github import Github, GithubException, InputGitTreeElement
@@ -216,9 +217,6 @@ class FlowManager:
         # 3: code/data fail
         # 4: fail external, run again
 
-        # check if run is finish, add run to the log, change state from 1 -> 2 or 3
-        # if not finish, do nothing
-        # condition here is to check if the run is not finished or failed externally
         # Create a copy of the DataFrame to avoid SettingWithCopyWarning
         df = run_state_df.copy()
         
@@ -237,37 +235,39 @@ class FlowManager:
         df = df[df['state'] == 1]
     
         for index, row in df.iterrows():
-            process_pid = int(row['process_id'])
+            slurm_job_id = row['process_id']
+            
+            # Check SLURM job status using sacct
+            cmd = ['sacct', '-j', str(slurm_job_id), '--format=State', '--noheader', '--parsable2']
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
             is_done = False
             next_state = -1
-            # TODO: remove this enforcement when run in cron job
-            while not is_done:
-                try:
-                    process = psutil.Process(process_pid)
-                    if process.is_running():
-                        status = process.status()
-                        if status == psutil.STATUS_ZOMBIE:
-                            is_done = True
-                            pid, status = os.waitpid(process_pid, os.WNOHANG)
-                            if os.WIFEXITED(status):
-                                exit_code = os.WEXITSTATUS(status)
-                                if exit_code == 0:
-                                    next_state = 2
-                                elif exit_code == 3:
-                                    next_state = 3
-                                else:
-                                    next_state = 4
-                        elif status in (psutil.STATUS_RUNNING,
-                                        psutil.STATUS_SLEEPING,
-                                        psutil.STATUS_DISK_SLEEP):
-                            is_done = False
-                except psutil.NoSuchProcess:
-                    is_done = True
-                    next_state = 4
-                except Exception as e:
-                    return f'An error occurred: {e}'
+            
+            if result.returncode == 0:
+                # Extract job state from sacct output
+                lines = result.stdout.strip().split('\n')
+                if lines:
+                    job_state = lines[0]
+                    
+                    # Map SLURM job states to our states
+                    if job_state in ['COMPLETED']:
+                        is_done = True
+                        next_state = 2  # Success
+                    elif job_state in ['FAILED', 'TIMEOUT', 'OUT_OF_MEMORY']:
+                        is_done = True
+                        next_state = 3  # Failed due to code/data
+                    elif job_state in ['CANCELLED', 'NODE_FAIL']:
+                        is_done = True
+                        next_state = 4  # External failure, can retry
+                    elif job_state in ['PENDING', 'RUNNING', 'SUSPENDED']:
+                        is_done = False  # Still running
+            else:
+                # Error checking job - treat as external failure
+                is_done = True
+                next_state = 4
 
-            # now check if process 2, 3 or 4
+            # Handle completed jobs
             if is_done:
                 if next_state == 2:
                     # get the result and upload
@@ -306,7 +306,7 @@ class FlowManager:
                                             row['actor'],
                                             next_state,
                                             row['process_id'],
-                                            'failed',
+                                            'failed external',
                                             row['run_uuid'],
                                             row['site_id'],
                                             row['data_dir'],
@@ -416,19 +416,42 @@ class FlowManager:
         if custom_params:
             for k, v in custom_params.items():
                 custom_params_str += f'--{k} {v} '
-        process_pid = None
-        process = subprocess.Popen(['bash', script_path,
-                                    self.oneflux_path,
-                                    self.command,
-                                    Path(self.oneflux_path)/'data',
-                                    siteid,
-                                    datadir,
-                                    str(firstyear), str(lastyear),
-                                    Path(self.oneflux_path)/log,
-                                    self.matlab_path,
-                                    custom_params_str], preexec_fn=os.setsid)
-        process_pid = process.pid
-        return process_pid, run_uuid
+        
+        # Create a SLURM job script
+        job_script_path = Path(self.oneflux_path)/f'job_{run_uuid}.sh'
+        with open(job_script_path, 'w') as f:
+            f.write('#!/bin/bash\n')
+            f.write(f'#SBATCH --job-name={siteid}_{run_uuid}\n')
+            f.write('#SBATCH --output=%j.out\n')
+            f.write('#SBATCH --error=%j.err\n')
+            f.write('#SBATCH --time=24:00:00\n')  # Adjust time limit as needed
+            f.write('#SBATCH --nodes=1\n')
+            f.write('#SBATCH --ntasks=1\n\n')
+            
+            # Write the actual command
+            f.write(f'bash {script_path} \\\n')
+            f.write(f'  {self.oneflux_path} \\\n')
+            f.write(f'  {self.command} \\\n')
+            f.write(f'  {Path(self.oneflux_path)/"data"} \\\n')
+            f.write(f'  {siteid} \\\n')
+            f.write(f'  {datadir} \\\n')
+            f.write(f'  {firstyear} {lastyear} \\\n')
+            f.write(f'  {Path(self.oneflux_path)/log} \\\n')
+            f.write(f'  {self.matlab_path} \\\n')
+            f.write(f'  {custom_params_str}\n')
+        
+        # Submit the job to SLURM
+        cmd = ['sbatch', str(job_script_path)]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        
+        # Parse the SLURM job ID from the output (format: "Submitted batch job 12345")
+        slurm_job_id = None
+        if result.returncode == 0:
+            match = re.search(r'Submitted batch job (\d+)', result.stdout)
+            if match:
+                slurm_job_id = match.group(1)
+        
+        return slurm_job_id, run_uuid
 
 
 if __name__ == '__main__':
