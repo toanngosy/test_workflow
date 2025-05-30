@@ -1,2 +1,3 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
-93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,scenarios/test_data.yaml,2025-05-30 06:11:53,0,pending,,US-ARc,US-ARc_sample_input,
+uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-05-30 06:54:42,1,39185582,running,5d9eaf6e-df50-4396-924a-11935ba4c768,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
+93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-05-30 06:11:53,0,,pending,,US-ARc,US-ARc_sample_input,scenarios/test_data.yaml
