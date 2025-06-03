@@ -1,17 +1,12 @@
 import datetime as dt
-import json
 import os
-import random
-import requests
 import yaml
-import re
 
 from dotenv import load_dotenv
-from github import Github, GithubException, InputGitTreeElement
+from github import Github, InputGitTreeElement
 import base64
 import pandas as pd
 import io
-import subprocess
 from pathlib import Path
 from uuid import uuid4
 import time
