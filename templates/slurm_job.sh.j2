@@ -1,0 +1,35 @@
+#!/bin/bash
+{% for key, value in slurm_params.items() %}
+#SBATCH --{{ key }}={{ value }}
+{% endfor %}
+#SBATCH --job-name={{ job_name }}
+#SBATCH --output=%j.out
+#SBATCH --error=%j.err
+
+# Job metadata
+echo "Job started at: $(date)"
+echo "Job ID: $SLURM_JOB_ID"
+echo "Job Name: {{ job_name }}"
+echo "Run UUID: {{ run_uuid }}"
+
+{% if environment_setup %}
+# Environment setup
+{% for cmd in environment_setup %}
+{{ cmd }}
+{% endfor %}
+{% endif %}
+
+# Change to working directory if specified
+{% if working_dir %}
+cd {{ working_dir }}
+{% endif %}
+
+# Execute the main command
+echo "Executing command: {{ command }}"
+{{ command }}
+
+# Capture exit code
+exit_code=$?
+echo "Job finished at: $(date)"
+echo "Exit code: $exit_code"
+exit $exit_code 

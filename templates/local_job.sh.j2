@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Local job execution script
+# Job Name: {{ job_name }}
+# Run UUID: {{ run_uuid }}
+
+echo "Local job started at: $(date)"
+echo "Job Name: {{ job_name }}"
+echo "Run UUID: {{ run_uuid }}"
+echo "PID: $$"
+
+{% if environment_setup %}
+# Environment setup
+{% for cmd in environment_setup %}
+{{ cmd }}
+{% endfor %}
+{% endif %}
+
+{% if working_dir %}
+# Change to working directory
+cd {{ working_dir }}
+{% endif %}
+
+# Execute the main command
+echo "Executing command: {{ command }}"
+{{ command }}
+
+# Capture exit code
+exit_code=$?
+echo "Local job finished at: $(date)"
+echo "Exit code: $exit_code"
+exit $exit_code 

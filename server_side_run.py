@@ -19,9 +19,15 @@ import yaml
 import logging
 from utils.logger import log_config
 
+# Import our new job system
+from job_system.manager import JobManager
+from job_system.base import JobStatus
+
 log = logging.getLogger(__name__)
 DEFAULT_LOGGING_FILENAME = 'server_side_run.log'
 log_config(level=logging.INFO, filename=DEFAULT_LOGGING_FILENAME, std=True, std_level=logging.INFO)
+
+# Status mapping for backward compatibility with existing logs
 status_dict = {
     0: 'pending',
     1: 'running',
@@ -29,30 +35,42 @@ status_dict = {
     3: 'failed',
     4: 'external failed'
 }
-# oneflux_path = '/home/portnoy/u0/sytoanngo/ONEFlux'
-# oneflux_input = '/home/portnoy/u0/sytoanngo/ONEFlux/data/US-ARc_sample_input'
-# oneflux_log = 'test_run_name.log'
-# script_path = '/home/portnoy/u0/sytoanngo/test_workflow/oneflux.sh'
-# run_id = '283a5b57-5266-4cb4-ad84-990c6b69b3e2'
-# site_id = 'US-ARc'
-server_config_path = '/pscratch/sd/t/toanngo/test_workflow/oneflux_run.yaml'
-script_path = '/pscratch/sd/t/toanngo/test_workflow/job_testrun.sh'
-slurm_path = Path(script_path).parent
+
+# Status mapping from new JobStatus to old numeric status
+job_status_mapping = {
+    JobStatus.PENDING: 0,
+    JobStatus.RUNNING: 1,
+    JobStatus.COMPLETED: 2,
+    JobStatus.FAILED: 3,
+    JobStatus.CANCELLED: 4,
+    JobStatus.TIMEOUT: 4,
+    JobStatus.UNKNOWN: 4
+}
+
 
 class FlowManager:
-    def __init__(self, gh_token, gh_repo, gh_branch, machine_name):
+    def __init__(self, gh_token, gh_repo, gh_branch, config_path):
         self.g = Github(gh_token)
         self.repo = self.g.get_repo(gh_repo)
         self.branch = gh_branch
-        self.machine_name = machine_name
+        
+        # Initialize the new job manager
+        self.job_manager = JobManager(config_path)
+        
+        # Get configuration for backward compatibility
+        config = self.job_manager.get_config()
+        
+        # Read machine name from config
+        self.machine_name = config.get('machine', {}).get('name')
+        if not self.machine_name:
+            raise ValueError("machine.name not found in config.yaml")
+        
         self.scenario_log_path = 'report/scenario.csv'
         self.machine_log_path = f'report/server/{self.machine_name}/log.csv'
-
-        with open(server_config_path, 'r') as file:
-            data = yaml.safe_load(file)
-        self.oneflux_path = data.get('oneflux_path')
-        self.command = data.get('command')
-        self.matlab_path = data.get('matlab_path')
+        
+        self.oneflux_path = config['paths']['oneflux_path']
+        self.command = config['paths']['command']
+        self.matlab_path = config['paths']['matlab_path']
 
     def _get_log(self, log_path, csv_header, create_new_log_str, get_log_str):
         try:
@@ -124,7 +142,7 @@ class FlowManager:
         machine_log_df = pd.concat([pd.DataFrame(new_log), machine_log_df])
         updated_content = machine_log_df.to_csv(index=False)
         file_sha = self.repo.get_contents(self.machine_log_path, ref=self.branch).sha
-        status_str = f'switch to {additional_info} for run uuid {uuid}-{params_index} at {machine_name}, process ID: {process_id}'
+        status_str = f'switch to {additional_info} for run uuid {uuid}-{params_index} at {self.machine_name}, process ID: {process_id}'
         file_status = self.repo.update_file(self.machine_log_path,
                                             status_str,
                                             updated_content,
@@ -137,6 +155,7 @@ class FlowManager:
         current_state = 0
         new_uuids = (set(scenario_log_df.uuid.tolist()) - set(machine_log_df.uuid.tolist()))
         status_str = 'No new scenario found in scenario log'
+        
         for uuid in new_uuids:
             data = scenario_log_df[scenario_log_df['uuid'] == uuid]
             file_path = data['file_path'].values[0]
@@ -147,10 +166,12 @@ class FlowManager:
             scenario = scenario_data[0]
             new_machine_log = {}
             new_run_count = {}
+            
             if scenario.get('machine') == self.machine_name:
                 new_run_count.setdefault(uuid, 0)
                 new_run_count[uuid] += 1
                 new_machine_runs = scenario.get('scenarios')
+                
                 for run_index, run_data in enumerate(new_machine_runs):
                     updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     additional_info = 'pending'
@@ -164,11 +185,13 @@ class FlowManager:
                     new_machine_log.setdefault('run_uuid', []).append(None)
                     new_machine_log.setdefault('site_id', []).append(run_data['params']['siteid'])
                     new_machine_log.setdefault('data_dir', []).append(run_data['params']['datadir'])
+                    
                 machine_log_df = pd.concat([pd.DataFrame(new_machine_log), machine_log_df])
+                
         if new_uuids:
             status_str = ''
             for uuid, count in new_run_count.items():
-                status_str += f'Add new {count} runs found from scenario uuid: {uuid} to machine: {machine_name}\n'
+                status_str += f'Add new {count} runs found from scenario uuid: {uuid} to machine: {self.machine_name}\n'
             updated_content = machine_log_df.to_csv(index=False)
             file_sha = self.repo.get_contents(self.machine_log_path, ref=self.branch).sha
             file_status = self.repo.update_file(self.machine_log_path,
@@ -180,43 +203,41 @@ class FlowManager:
         return machine_log_df, status_str
 
     def is_machine_available(self):
-        # TODO: implement
-        return True
+        """Check if machine is available using JobManager"""
+        return self.job_manager.is_scheduler_available()
 
     def run_step_04_1(self, run_state_df):
-        # check if machine is available, start the run
-        # add run to the log, change state from 0 -> 1
-        # if cannot start the run, don't add
+        """Start pending jobs using the new JobManager"""
         next_state = 1
         additional_info = 'running'
         status = []
         
         df = run_state_df[run_state_df['state'].isin([0, 4])]
         machine_log_df, _ = self.get_machine_log()
+        
         for _, row in df.iterrows():
-            # TODO: do we have the assumption that when machine avail
-            # it should be able to run the process? add condition to not do that
             if self.is_machine_available():
-                process_pid, run_uuid = self.start_process(row)
-                machine_log_df, s_str = self.update_machine_log(row['uuid'],
-                                                                row['index'],
-                                                                row['actor'],
-                                                                next_state,
-                                                                process_pid,
-                                                                additional_info,
-                                                                run_uuid,
-                                                                row['site_id'],
-                                                                row['data_dir'],
-                                                                row['file_path'])
-                status.append(s_str)
+                job_id, run_uuid, success_message = self.start_process(row)
+                if job_id:
+                    machine_log_df, s_str = self.update_machine_log(row['uuid'],
+                                                                    row['index'],
+                                                                    row['actor'],
+                                                                    next_state,
+                                                                    job_id,
+                                                                    additional_info,
+                                                                    run_uuid,
+                                                                    row['site_id'],
+                                                                    row['data_dir'],
+                                                                    row['file_path'])
+                    status.append(s_str)
+                else:
+                    log.error(f"Failed to start process: {success_message}")
+                    
         status_str = '\n'.join(status)
         return machine_log_df, status_str
 
     def run_step_1_234(self, run_state_df):
-        # 2: succeed
-        # 3: code/data fail
-        # 4: fail external, run again
-
+        """Check job status and handle completed jobs"""
         # Create a copy of the DataFrame to avoid SettingWithCopyWarning
         df = run_state_df.copy()
         
@@ -228,56 +249,32 @@ class FlowManager:
                             ascending=[True, True, True])
         
         # Keep only the last row for each uuid and index combination
-        # This will be the row with the latest last_updated_timestamp
         df = df.groupby(['uuid', 'index']).last().reset_index()
         
-        # Filter rows where state is 1
+        # Filter rows where state is 1 (running)
         df = df[df['state'] == 1]
     
         for index, row in df.iterrows():
-            slurm_job_id = int(row['process_id'])
+            job_id = str(row['process_id'])
             
-            # Check SLURM job status using sacct
-            cmd = ['sacct', '-j', str(int(slurm_job_id)), '--format=State', '--noheader', '--parsable2']
-            result = subprocess.run(cmd, capture_output=True, text=True)
-            is_done = False
-            next_state = -1
+            # Check job status using JobManager
+            job_status = self.job_manager.check_job_status(job_id)
             
-            if result.returncode == 0:
-                # Extract job state from sacct output
-                lines = result.stdout.strip().split('\n')
-                if lines:
-                    job_state = lines[0]
-                    
-                    # Map SLURM job states to our states
-                    if job_state in ['COMPLETED']:
-                        is_done = True
-                        next_state = 2  # Success
-                    elif job_state in ['FAILED', 'TIMEOUT', 'OUT_OF_MEMORY']:
-                        is_done = True
-                        next_state = 3  # Failed due to code/data
-                    elif job_state in ['CANCELLED', 'NODE_FAIL']:
-                        is_done = True
-                        next_state = 4  # External failure, can retry
-                    elif job_state in ['PENDING', 'RUNNING', 'SUSPENDED']:
-                        is_done = False  # Still running
-            else:
-                # Error checking job - treat as external failure
-                is_done = True
-                next_state = 4
-
+            # Convert JobStatus to old numeric status
+            numeric_status = job_status_mapping.get(job_status, 4)
+            
             # Handle completed jobs
-            if is_done:
-                if next_state == 2:
+            if job_status in [JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED, JobStatus.TIMEOUT]:
+                if job_status == JobStatus.COMPLETED:
                     is_upload_successful, result_path = self.upload_run_result(row['site_id'],
                                                                                row['data_dir'],
                                                                                row['run_uuid'],
-                                                                               slurm_job_id)
+                                                                               job_id)
                     if is_upload_successful:
                         self.update_machine_log(row['uuid'],
                                                 row['index'], 
                                                 row['actor'],
-                                                next_state,
+                                                2,  # Completed state
                                                 row['process_id'],
                                                 result_path,
                                                 row['run_uuid'],
@@ -285,34 +282,12 @@ class FlowManager:
                                                 row['data_dir'],
                                                 row['file_path'])
                     else:
-                        # TODO: add error handle here, succeed but can't upload result?
-                        pass
-                # elif next_state == 3:
-                #     self.update_machine_log(row['uuid'],
-                #                             row['index'], 
-                #                             row['actor'],
-                #                             next_state,
-                #                             row['process_id'],
-                #                             'failed code/data',
-                #                             row['run_uuid'],
-                #                             row['site_id'],
-                #                             row['data_dir'],
-                #                             row['file_path'])
-                # elif next_state == 4:
-                #     # add failed state because of external error/ will need to rerun
-                #     self.update_machine_log(row['uuid'],
-                #                             row['index'], 
-                #                             row['actor'],
-                #                             next_state,
-                #                             row['process_id'],
-                #                             'failed external',
-                #                             row['run_uuid'],
-                #                             row['site_id'],
-                #                             row['data_dir'],
-                #                             row['file_path'])
+                        log.error(f"Job completed but failed to upload results for {row['run_uuid']}")
+                        
         return '', None
 
     def upload_run_result(self, site_id, data_dir, run_uuid, process_id):
+        """Upload job results using JobManager to get output files"""
         try:
             # Upload original log file
             content_file = Path(self.oneflux_path)/f'{run_uuid}.log'
@@ -322,15 +297,8 @@ class FlowManager:
                                                 f'generate report {run_uuid}',
                                                 content, branch=self.branch)
             
-            # Define the paths to SLURM output files based on the job ID
-            slurm_out_file = Path(slurm_path)/f"{process_id}.out"
-            slurm_err_file = Path(slurm_path)/f"{process_id}.err"
-            slurm_files = []
-            
-            if slurm_out_file.exists():
-                slurm_files.append(slurm_out_file)
-            if slurm_err_file.exists():
-                slurm_files.append(slurm_err_file)
+            # Get job output files from JobManager
+            output_files = self.job_manager.get_job_output_files(process_id)
             
             # Prepare for uploading both log files and image files
             element_list = list()
@@ -339,21 +307,23 @@ class FlowManager:
             base_tree = self.repo.get_git_tree(master_sha)
             commit_message = f'Upload results for job {run_uuid}'
             
-            # Upload SLURM output files
-            for slurm_file in slurm_files:
-                file_name = slurm_file.name
-                with open(slurm_file, 'r') as f:
-                    data = f.read()
-                
-                # Create blob and add to element list for commit
-                blob = self.repo.create_git_blob(data, 'base64')
-                element = InputGitTreeElement(
-                    path=f'report/{site_id}/{run_uuid}/{file_name}',
-                    mode='100644',
-                    type='blob',
-                    sha=blob.sha
-                )
-                element_list.append(element)
+            # Upload job output files
+            for output_file in output_files:
+                file_path = Path(output_file)
+                if file_path.exists():
+                    file_name = file_path.name
+                    with open(file_path, 'r') as f:
+                        data = f.read()
+                    
+                    # Create blob and add to element list for commit
+                    blob = self.repo.create_git_blob(data, 'base64')
+                    element = InputGitTreeElement(
+                        path=f'report/{site_id}/{run_uuid}/{file_name}',
+                        mode='100644',
+                        type='blob',
+                        sha=blob.sha
+                    )
+                    element_list.append(element)
             
             # Continue with uploading image files
             output_img_path = Path(self.oneflux_path)/'data'/data_dir/'99_fluxnet2015'
@@ -390,6 +360,7 @@ class FlowManager:
             return False, None
 
     def get_run_state(self, machine_log_df):
+        """Get current run state (unchanged from original)"""
         try:
             # Convert 'last_updated_timestamp' to datetime if it's not already
             machine_log_df['last_updated_timestamp'] = pd.to_datetime(machine_log_df['last_updated_timestamp'])
@@ -413,7 +384,6 @@ class FlowManager:
             run_state_df = machine_log_df.copy()
             run_state_df['count'] = 0  # Add count column with default value 0
 
-
         # Filter rows based on the new conditions
         filtered_run_state_df = run_state_df[
             (run_state_df['state'] < 2) | 
@@ -436,96 +406,110 @@ class FlowManager:
         return filtered_run_state_df, status_str
 
     def start_process(self, data):
+        """Start a process using the new JobManager"""
         run_uuid = str(uuid4())
         uuid = data['uuid']
         file_path = data['file_path']
         param_index = data['index']
+        
+        # Get run parameters from GitHub
         run_file_contents = self.repo.get_contents(file_path, ref=self.branch)
         run_file_data = run_file_contents.decoded_content.decode('utf-8')
         run_file_yaml = yaml.safe_load(run_file_data)
         runs = run_file_yaml[0].get('scenarios')
         run_data = runs[param_index]
         params = run_data.get('params')
-        siteid = params.get('siteid')
-        datadir = params.get('datadir')
-        log = f'{run_uuid}.log'
-        firstyear = params.get('firstyear')
-        lastyear = params.get('lastyear')
-        custom_params = run_data.get('custom_params')
-        custom_params_str = ''
-        if custom_params:
-            for k, v in custom_params.items():
-                custom_params_str += f'--{k} {v} '
         
-        # Create a SLURM job script
-        job_script_path = Path(self.oneflux_path)/f'job_{run_uuid}.sh'
-        with open(job_script_path, 'w') as f:
-            f.write('#!/bin/bash\n')
-            f.write('#SBATCH --qos=regular\n')
-            f.write(f'#SBATCH --job-name={siteid}_{run_uuid}\n')
-            f.write('#SBATCH --output=%j.out\n')
-            f.write('#SBATCH --error=%j.err\n')
-            f.write('#SBATCH --time=01:00:00\n')
-            f.write('#SBATCH --nodes=1\n')
-            f.write('#SBATCH --constraint=cpu\n')
-            f.write('#SBATCH --tasks-per-node=1\n')
-            f.write('#SBATCH --account=m1651\n')
-            f.write('#SBATCH --mail-user=sytoanngo@lbl.gov\n\n')
-
-            # Activate environment
-            f.write('module load conda\n')
-            f.write('conda activate oneflux\n')
-            # Write the actual command
-            # f.write(f'bash {script_path} \\\n')
-            # f.write(f'  {self.oneflux_path} \\\n')
-            f.write(f'python  {self.command} \\\n')
-            f.write(f'  all \\\n')
-            f.write(f'  {Path(self.oneflux_path)/"data"} \\\n')
-            f.write(f'  {siteid} \\\n')
-            f.write(f'  {datadir} \\\n')
-            f.write(f'  {firstyear} {lastyear} \\\n')
-            f.write(f'  -l {Path(self.oneflux_path)/log} \\\n')
-            f.write(f'  --mcr {self.matlab_path} \\\n')
-            f.write(f'  {custom_params_str}\n')
-        # Submit the job to SLURM
-        cmd = ['sbatch', str(job_script_path)]
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        # Parse the SLURM job ID from the output (format: "Submitted batch job 12345")
-        slurm_job_id = None
-        if result.returncode == 0:
-            match = re.search(r'Submitted batch job (\d+)', result.stdout)
-            if match:
-                slurm_job_id = match.group(1)
-        return slurm_job_id, run_uuid
+        # Extract parameters
+        workflow_params = {
+            'siteid': params.get('siteid'),
+            'datadir': params.get('datadir'),
+            'firstyear': params.get('firstyear'),
+            'lastyear': params.get('lastyear'),
+            'custom_params': run_data.get('custom_params', {})
+        }
+        
+        # Determine workflow type from the scenario data
+        # For now, default to oneflux, but this could be configurable in the scenario
+        workflow_type = run_data.get('workflow_type', 'oneflux')
+        
+        # Submit job using JobManager
+        job_id, success, message = self.job_manager.submit_workflow(
+            workflow_type=workflow_type,
+            params=workflow_params,
+            run_uuid=run_uuid
+        )
+        
+        if success:
+            return job_id, run_uuid, message
+        else:
+            return None, None, message
 
 
 if __name__ == '__main__':
-    # read config file
-    with open('config.yaml') as f:
-        config = yaml.safe_load(f)
-
-    machine_name = config.get('machine_name')
     load_dotenv()
+    
+    # Get GitHub configuration from environment variables
     gh_token = os.environ.get('TOKEN')
     gh_repo = os.environ.get('REPO')
     gh_branch = os.environ.get('BRANCH')
+    
+    # Validate required environment variables
+    if not all([gh_token, gh_repo, gh_branch]):
+        missing_vars = []
+        if not gh_token:
+            missing_vars.append('TOKEN')
+        if not gh_repo:
+            missing_vars.append('REPO')
+        if not gh_branch:
+            missing_vars.append('BRANCH')
+        
+        log.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+        log.error("Please ensure these are set in your .env file:")
+        log.error("  TOKEN=your_github_token")
+        log.error("  REPO=username/repository")
+        log.error("  BRANCH=report")
+        exit(1)
+    
+    # Read job system configuration
+    config_path = 'config.yaml'
+    if not Path(config_path).exists():
+        log.error(f"Configuration file not found: {config_path}")
+        log.error("Please ensure config.yaml exists with proper job system configuration")
+        exit(1)
+    
+    try:
+        # Initialize with new configuration
+        flow_manager = FlowManager(gh_token, gh_repo, gh_branch, config_path)
+        log.info(f"FlowManager initialized successfully for machine: {flow_manager.machine_name}")
+        log.info(f"Using repository: {gh_repo}, branch: {gh_branch}")
+        
+    except Exception as e:
+        log.error(f"Failed to initialize FlowManager: {e}")
+        exit(1)
+    
+    # Rest of the execution flow remains the same
+    try:
+        scenario_log_df, status_str = flow_manager.get_scenario_log()
+        log.info(status_str)
+        machine_log_df, status_str = flow_manager.get_machine_log()
+        log.info(status_str)
 
-    flow_manager = FlowManager(gh_token, gh_repo, gh_branch, machine_name)
-    scenario_log_df, status_str = flow_manager.get_scenario_log()
-    log.info(status_str)
-    machine_log_df, status_str = flow_manager.get_machine_log()
-    log.info(status_str)
+        # Update machine log with step 0
+        machine_log_df, status_str = flow_manager.run_step_0(scenario_log_df, machine_log_df)
+        log.info(status_str)
+        
+        # Consolidate df
+        filtered_run_state_df, status_str = flow_manager.get_run_state(machine_log_df)
+        log.info(status_str)
 
-    # update machine log with step 0
-    machine_log_df, status_str = flow_manager.run_step_0(scenario_log_df, machine_log_df)
-    log.info(status_str)
-    # consolidate df
-    filtered_run_state_df, status_str = flow_manager.get_run_state(machine_log_df)
-    log.info(status_str)
+        # Run step 04 -> 1
+        machine_log_df, status_str = flow_manager.run_step_04_1(filtered_run_state_df)
+        log.info(status_str)
 
-    # run step 04 -> 1
-    machine_log_df, status_str = flow_manager.run_step_04_1(filtered_run_state_df)
-    log.info(status_str)
-
-    machine_log_df, status_str = flow_manager.run_step_1_234(machine_log_df)
-    log.info(status_str)
+        machine_log_df, status_str = flow_manager.run_step_1_234(machine_log_df)
+        log.info(status_str)
+        
+    except Exception as e:
+        log.error(f"Error during execution: {e}")
+        exit(1) 
