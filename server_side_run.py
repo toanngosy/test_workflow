@@ -23,29 +23,15 @@ from utils.logger import log_config
 from job_system.manager import JobManager
 from job_system.base import JobStatus
 
+# Import constants
+from constants import (
+    STATE_PENDING, STATE_RUNNING, STATE_COMPLETED, STATE_FAILED, STATE_EXTERNAL_FAILED,
+    STATUS_DICT, JOB_STATUS_MAPPING
+)
+
 log = logging.getLogger(__name__)
 DEFAULT_LOGGING_FILENAME = 'server_side_run.log'
 log_config(level=logging.INFO, filename=DEFAULT_LOGGING_FILENAME, std=True, std_level=logging.INFO)
-
-# Status mapping for backward compatibility with existing logs
-status_dict = {
-    0: 'pending',
-    1: 'running',
-    2: 'done',
-    3: 'failed',
-    4: 'external failed'
-}
-
-# Status mapping from new JobStatus to old numeric status
-job_status_mapping = {
-    JobStatus.PENDING: 0,
-    JobStatus.RUNNING: 1,
-    JobStatus.COMPLETED: 2,
-    JobStatus.FAILED: 3,
-    JobStatus.CANCELLED: 4,
-    JobStatus.TIMEOUT: 4,
-    JobStatus.UNKNOWN: 4
-}
 
 
 class FlowManager:
@@ -152,7 +138,7 @@ class FlowManager:
         return machine_log_df, status_str
 
     def run_step_0(self, scenario_log_df, machine_log_df):
-        current_state = 0
+        current_state = STATE_PENDING
         new_uuids = (set(scenario_log_df.uuid.tolist()) - set(machine_log_df.uuid.tolist()))
         status_str = 'No new scenario found in scenario log'
         
@@ -174,7 +160,7 @@ class FlowManager:
                 
                 for run_index, run_data in enumerate(new_machine_runs):
                     updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    additional_info = 'pending'
+                    additional_info = STATUS_DICT[STATE_PENDING]
                     new_machine_log.setdefault('uuid', []).append(uuid)
                     new_machine_log.setdefault('index', []).append(run_index)
                     new_machine_log.setdefault('actor', []).append(actor)
@@ -208,11 +194,11 @@ class FlowManager:
 
     def run_step_04_1(self, run_state_df):
         """Start pending jobs using the new JobManager"""
-        next_state = 1
-        additional_info = 'running'
+        next_state = STATE_RUNNING
+        additional_info = STATUS_DICT[STATE_RUNNING]
         status = []
         
-        df = run_state_df[run_state_df['state'].isin([0, 4])]
+        df = run_state_df[run_state_df['state'].isin([STATE_PENDING, STATE_EXTERNAL_FAILED])]
         machine_log_df, _ = self.get_machine_log()
         
         for _, row in df.iterrows():
@@ -252,7 +238,7 @@ class FlowManager:
         df = df.groupby(['uuid', 'index']).last().reset_index()
         
         # Filter rows where state is 1 (running)
-        df = df[df['state'] == 1]
+        df = df[df['state'] == STATE_RUNNING]
     
         for index, row in df.iterrows():
             job_id = str(int(row['process_id']))
@@ -261,7 +247,7 @@ class FlowManager:
             job_status = self.job_manager.check_job_status(job_id)
             
             # Convert JobStatus to old numeric status
-            numeric_status = job_status_mapping.get(job_status, 4)
+            numeric_status = JOB_STATUS_MAPPING.get(job_status, STATE_EXTERNAL_FAILED)
             
             # Handle completed jobs
             if job_status in [JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED, JobStatus.TIMEOUT]:
@@ -274,7 +260,7 @@ class FlowManager:
                         self.update_machine_log(row['uuid'],
                                                 row['index'], 
                                                 row['actor'],
-                                                2,  # Completed state
+                                                STATE_COMPLETED,  # Completed state
                                                 row['process_id'],
                                                 result_path,
                                                 row['run_uuid'],
@@ -287,9 +273,9 @@ class FlowManager:
                     self.update_machine_log(row['uuid'],
                                             row['index'], 
                                             row['actor'],
-                                            3,  # Failed state
+                                            STATE_FAILED,  # Failed state
                                             row['process_id'],
-                                            'failed code/data',
+                                            STATUS_DICT[STATE_FAILED],
                                             row['run_uuid'],
                                             row['site_id'],
                                             row['data_dir'],
@@ -299,9 +285,9 @@ class FlowManager:
                     self.update_machine_log(row['uuid'],
                                             row['index'], 
                                             row['actor'],
-                                            4,  # External failure state
+                                            STATE_EXTERNAL_FAILED,  # External failure state
                                             row['process_id'],
-                                            'failed external',
+                                            STATUS_DICT[STATE_EXTERNAL_FAILED],
                                             row['run_uuid'],
                                             row['site_id'],
                                             row['data_dir'],
@@ -388,7 +374,7 @@ class FlowManager:
             machine_log_df['last_updated_timestamp'] = pd.to_datetime(machine_log_df['last_updated_timestamp'])
             
             # Count occurrences of state 4 for each (uuid, index) combination
-            state_4_count = machine_log_df[machine_log_df['state'] == 4].groupby(['uuid', 'index']).size().reset_index(name='count')
+            state_4_count = machine_log_df[machine_log_df['state'] == STATE_EXTERNAL_FAILED].groupby(['uuid', 'index']).size().reset_index(name='count')
             
             # Sort the dataframe by uuid, index, and last_updated_timestamp
             machine_log_df = machine_log_df.sort_values(['uuid', 'index', 'last_updated_timestamp'])
@@ -408,19 +394,19 @@ class FlowManager:
 
         # Filter rows based on the new conditions
         filtered_run_state_df = run_state_df[
-            (run_state_df['state'] < 2) | 
-            ((run_state_df['state'] == 4) & (run_state_df['count'] < 3))
+            (run_state_df['state'] < STATE_COMPLETED) | 
+            ((run_state_df['state'] == STATE_EXTERNAL_FAILED) & (run_state_df['count'] < 3))
         ].reset_index(drop=True)
 
         # Remove rows with state 3
-        filtered_run_state_df = filtered_run_state_df[filtered_run_state_df['state'] != 3]
+        filtered_run_state_df = filtered_run_state_df[filtered_run_state_df['state'] != STATE_FAILED]
 
         # Count the occurrences of each state
         state_counts = filtered_run_state_df['state'].value_counts()
 
         # Create the status string
         if not state_counts.empty:
-            status_str = 'There are ' + ', '.join([f"{count} {status_dict.get(status)}" 
+            status_str = 'There are ' + ', '.join([f"{count} {STATUS_DICT.get(status)}" 
                                                    for status, count in state_counts.items()])
         else:
             status_str = 'No run is running or pending'
