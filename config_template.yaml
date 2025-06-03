@@ -1,1 +1,89 @@
-machine_name: <put your machine name here>
+# Enhanced Configuration Template for Generalized Job Execution System
+# Copy this file to config.yaml and customize the values for your environment
+
+scheduler:
+  type: "slurm"  # Options: slurm, pbs, local, kubernetes
+  
+  slurm:
+    default_params:
+      qos: "regular"                    # Quality of Service (QoS) for SLURM jobs
+      time: "01:00:00"                  # Maximum wall time (HH:MM:SS)
+      nodes: 1                          # Number of nodes to allocate
+      constraint: "cpu"                 # Node constraint (e.g., cpu, gpu, haswell)
+      tasks_per_node: 1                 # Number of tasks per node
+      account: "YOUR_ACCOUNT"           # Your SLURM account/allocation
+      mail_user: "your.email@domain.com" # Email for job notifications
+    
+    template: "slurm_job.sh.j2"         # Jinja2 template for SLURM job scripts
+    output_dir: "/path/to/your/output"  # Directory for job outputs and scripts
+    
+  pbs:
+    default_params:
+      walltime: "01:00:00"              # Maximum wall time for PBS jobs
+      nodes: 1                          # Number of nodes to allocate
+      queue: "batch"                    # PBS queue name
+    template: "pbs_job.sh.j2"           # Jinja2 template for PBS job scripts
+    
+  local:
+    max_concurrent_jobs: 4              # Maximum number of concurrent local jobs
+    working_directory: "/tmp/local_jobs" # Working directory for local execution
+    template: "local_job.sh.j2"         # Jinja2 template for local job scripts
+
+# Define different types of workflows that can be executed
+workflow_types:
+  oneflux:
+    command_template: "python {command} all {data_path} {siteid} {datadir} {firstyear} {lastyear} -l {log_path} --mcr {matlab_path} {custom_params}"
+    required_params: ["siteid", "datadir", "firstyear", "lastyear"]
+    optional_params: ["custom_params"]
+    environment_setup:
+      - "module load conda"             # Load conda module
+      - "conda activate oneflux"        # Activate oneflux conda environment
+    
+  generic_python:
+    command_template: "python {script} {args}"
+    required_params: ["script"]
+    optional_params: ["args"]
+    environment_setup: []               # Add any required environment setup commands
+    
+  custom_script:
+    command_template: "bash {script_path} {args}"
+    required_params: ["script_path"]
+    optional_params: ["args"]
+    environment_setup: []               # Add any required environment setup commands
+    
+  # Example: Add your own workflow type
+  # my_workflow:
+  #   command_template: "your_command {param1} {param2}"
+  #   required_params: ["param1", "param2"]
+  #   optional_params: ["param3"]
+  #   environment_setup:
+  #     - "module load your_module"
+
+# Define paths used by the system
+paths:
+  oneflux_path: "/path/to/ONEFlux"                    # Path to ONEFlux installation
+  matlab_path: "/path/to/matlab_runtime"              # Path to MATLAB runtime
+  command: "/path/to/oneflux_pipeline.py"             # Path to main ONEFlux command
+  script_output_dir: "/path/to/output/scripts"        # Directory for generated scripts
+  log_output_dir: "/path/to/output/logs"              # Directory for log files
+
+# Machine-specific configuration
+machine:
+  name: "YOUR_MACHINE_NAME"           # Name identifier for this machine
+  max_retries: 3                      # Maximum number of job retry attempts
+  availability_check:
+    type: "slurm_queue"               # Options: slurm_queue, custom_script, always_true
+    params:
+      max_queued_jobs: 10             # Maximum allowed queued jobs before throttling
+
+# Additional configuration sections can be added here
+# Example:
+# notifications:
+#   email_on_completion: true
+#   email_on_failure: true
+#   slack_webhook: "https://hooks.slack.com/your/webhook"
+#
+# logging:
+#   level: "INFO"                     # Options: DEBUG, INFO, WARNING, ERROR
+#   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+#   file: "/path/to/logfile.log"
