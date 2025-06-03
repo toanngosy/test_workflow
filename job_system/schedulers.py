@@ -26,7 +26,6 @@ class SlurmScheduler(JobScheduler):
         try:
             cmd = ['sbatch', str(job_script_path)]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-            
             if result.returncode == 0:
                 # Parse job ID from output: "Submitted batch job 12345"
                 match = re.search(r'Submitted batch job (\d+)', result.stdout)

@@ -5,7 +5,7 @@ Job Manager that orchestrates workflow execution and job scheduling.
 import yaml
 import os
 from pathlib import Path
-from typing import Dict, Any, Tuple, Optional
+from typing import Dict, Any, Tuple, Optional, List
 from uuid import uuid4
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
@@ -145,7 +145,7 @@ class JobManager:
         try:
             # Generate job script
             job_script_path = self._generate_job_script(workflow_type, workflow, params, run_uuid)
-            
+            print('here', job_script_path)    
             # Submit job
             job_id, success = self.scheduler.submit_job(job_script_path)
             
@@ -210,7 +210,7 @@ class JobManager:
         """Cancel a job"""
         return self.scheduler.cancel_job(job_id)
     
-    def get_job_output_files(self, job_id: str) -> list[str]:
+    def get_job_output_files(self, job_id: str) -> List[str]:
         """Get output files for a job"""
         return self.scheduler.get_job_output_files(job_id)
     
@@ -218,7 +218,7 @@ class JobManager:
         """Check if the scheduler is available"""
         return self.scheduler.is_available()
     
-    def get_supported_workflow_types(self) -> list[str]:
+    def get_supported_workflow_types(self) -> List[str]:
         """Get list of supported workflow types"""
         return list(self.workflow_types.keys())
     
@@ -226,7 +226,7 @@ class JobManager:
         """Get the current configuration"""
         return self.config.copy()
     
-    def validate_workflow_params(self, workflow_type: str, params: Dict[str, Any]) -> Tuple[bool, list[str]]:
+    def validate_workflow_params(self, workflow_type: str, params: Dict[str, Any]) -> Tuple[bool, List[str]]:
         """Validate parameters for a specific workflow type"""
         if workflow_type not in self.workflow_types:
             return False, [f"Unknown workflow type: {workflow_type}"]
