@@ -487,18 +487,15 @@ class FlowManager:
             f.write(f'  -l {Path(self.oneflux_path)/log} \\\n')
             f.write(f'  --mcr {self.matlab_path} \\\n')
             f.write(f'  {custom_params_str}\n')
-        
         # Submit the job to SLURM
         cmd = ['sbatch', str(job_script_path)]
         result = subprocess.run(cmd, capture_output=True, text=True)
-        
         # Parse the SLURM job ID from the output (format: "Submitted batch job 12345")
         slurm_job_id = None
         if result.returncode == 0:
             match = re.search(r'Submitted batch job (\d+)', result.stdout)
             if match:
                 slurm_job_id = match.group(1)
-        
         return slurm_job_id, run_uuid
 
 
@@ -506,31 +503,29 @@ if __name__ == '__main__':
     # read config file
     with open('config.yaml') as f:
         config = yaml.safe_load(f)
-    
-    run_name = config.get('run_name')
+
     machine_name = config.get('machine_name')
     load_dotenv()
     gh_token = os.environ.get('TOKEN')
     gh_repo = os.environ.get('REPO')
     gh_branch = os.environ.get('BRANCH')
-    
+
     flow_manager = FlowManager(gh_token, gh_repo, gh_branch, machine_name)
     scenario_log_df, status_str = flow_manager.get_scenario_log()
     log.info(status_str)
     machine_log_df, status_str = flow_manager.get_machine_log()
     log.info(status_str)
-    
+
     # update machine log with step 0
     machine_log_df, status_str = flow_manager.run_step_0(scenario_log_df, machine_log_df)
     log.info(status_str)
     # consolidate df
     filtered_run_state_df, status_str = flow_manager.get_run_state(machine_log_df)
     log.info(status_str)
-    
-    # filtered_run_state_df = machine_log_df
+
     # run step 04 -> 1
     machine_log_df, status_str = flow_manager.run_step_04_1(filtered_run_state_df)
     log.info(status_str)
-    
+
     machine_log_df, status_str = flow_manager.run_step_1_234(machine_log_df)
     log.info(status_str)
