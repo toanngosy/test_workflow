@@ -2,7 +2,7 @@
   scenarios: 
     - params:
         siteid: US-ARc
-        datadir: US-ARc_sample_input
+        datadir: US-ARc_sample_output
         firstyear: 2005
         lastyear: 2006
       custom_params: 
