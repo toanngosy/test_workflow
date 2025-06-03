@@ -255,7 +255,7 @@ class FlowManager:
         df = df[df['state'] == 1]
     
         for index, row in df.iterrows():
-            job_id = str(row['process_id'])
+            job_id = str(int(row['process_id']))
             
             # Check job status using JobManager
             job_status = self.job_manager.check_job_status(job_id)
@@ -283,7 +283,29 @@ class FlowManager:
                                                 row['file_path'])
                     else:
                         log.error(f"Job completed but failed to upload results for {row['run_uuid']}")
-                        
+                elif job_status == JobStatus.FAILED:
+                    self.update_machine_log(row['uuid'],
+                                            row['index'], 
+                                            row['actor'],
+                                            3,  # Failed state
+                                            row['process_id'],
+                                            'failed code/data',
+                                            row['run_uuid'],
+                                            row['site_id'],
+                                            row['data_dir'],
+                                            row['file_path'])
+                elif job_status in [JobStatus.CANCELLED, JobStatus.TIMEOUT]:
+                    # add failed state because of external error/ will need to rerun
+                    self.update_machine_log(row['uuid'],
+                                            row['index'], 
+                                            row['actor'],
+                                            4,  # External failure state
+                                            row['process_id'],
+                                            'failed external',
+                                            row['run_uuid'],
+                                            row['site_id'],
+                                            row['data_dir'],
+                                            row['file_path'])
         return '', None
 
     def upload_run_result(self, site_id, data_dir, run_uuid, process_id):
