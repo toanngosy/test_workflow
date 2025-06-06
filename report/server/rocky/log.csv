@@ -1,3 +1,2 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
-93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-06-05 21:52:30,1,local_1749185549,running,83cf5fb1-ce74-4bae-ab87-fc128beda610,US-ARc,US-ARc_sample_output,scenarios/test_data.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-06-02 18:04:39,0,,pending,,US-ARc,US-ARc_sample_output,scenarios/test_data.yaml
