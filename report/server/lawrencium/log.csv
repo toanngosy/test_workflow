@@ -1,2 +1,3 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
-588fde20-43fb-4019-864f-a08463b309ed,0,toanngosy,scenarios/lawrencium_test_data.yaml,2025-06-13 08:03:46,0,pending,,US-ARc,US-ARc_sample_output,
+uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+588fde20-43fb-4019-864f-a08463b309ed,0,toanngosy,2025-06-13 08:03:50,1,17660783,running,3b3d0937-10b7-4141-b73b-15f5059e432d,US-ARc,US-ARc_sample_output,scenarios/lawrencium_test_data.yaml
+588fde20-43fb-4019-864f-a08463b309ed,0,toanngosy,2025-06-13 08:03:46,0,,pending,,US-ARc,US-ARc_sample_output,scenarios/lawrencium_test_data.yaml
