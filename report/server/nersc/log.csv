@@ -1,1 +1,2 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir
+uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
+322bd0e9-4006-4044-8a03-bda7e847a8a7,0,toanngosy,scenarios/nersc_test_data.yaml,2025-06-13 08:03:52,0,pending,,US-ARc,US-ARc_sample_output,
