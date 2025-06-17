@@ -1,5 +1,19 @@
 [
   {
+    "uuid": "322bd0e9-4006-4044-8a03-bda7e847a8a7",
+    "actor": "toanngosy",
+    "last_updated_timestamp": "2025-06-13 15:02:19",
+    "updated_by": "GH Actions",
+    "file_path": "scenarios/nersc_test_data.yaml"
+  },
+  {
+    "uuid": "588fde20-43fb-4019-864f-a08463b309ed",
+    "actor": "toanngosy",
+    "last_updated_timestamp": "2025-06-13 15:00:55",
+    "updated_by": "GH Actions",
+    "file_path": "scenarios/lawrencium_test_data.yaml"
+  },
+  {
     "uuid": "93597274-1ed2-4e65-bb36-4b7801786d12",
     "actor": "toanngosy",
     "last_updated_timestamp": "2024-09-10 18:37:32",

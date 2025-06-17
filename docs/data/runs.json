@@ -1,41 +1,38 @@
 [
   {
-    "uuid": "93597274-1ed2-4e65-bb36-4b7801786d12",
-    "index": "0",
-    "actor": "toanngosy",
-    "last_updated_timestamp": "2025-06-03 10:12:31",
-    "state": "3",
-    "process_id": "39273868.0",
-    "additional_info": "failed code/data",
-    "run_uuid": "44285b68-42af-43c0-922d-67b118294ddf",
     "site_id": "US-ARc",
-    "data_dir": "US-ARc_sample_output",
-    "file_path": "scenarios/test_data.yaml"
+    "server": "rocky",
+    "run_uuid": "96f72073-8d4b-4985-87b0-f0f51f855232",
+    "last_updated_timestamp": "2025-06-16 19:41:37",
+    "status": "running",
+    "params": "scenarios/test_data.yaml",
+    "output": "",
+    "actor": "toanngosy",
+    "process_id": "35446.0",
+    "state": "1"
   },
   {
-    "uuid": "93597274-1ed2-4e65-bb36-4b7801786d12",
-    "index": "0",
-    "actor": "toanngosy",
-    "last_updated_timestamp": "2025-06-03 08:35:13",
-    "state": "1",
-    "process_id": "39273868.0",
-    "additional_info": "running",
-    "run_uuid": "44285b68-42af-43c0-922d-67b118294ddf",
     "site_id": "US-ARc",
-    "data_dir": "US-ARc_sample_output",
-    "file_path": "scenarios/test_data.yaml"
+    "server": "lawrencium",
+    "run_uuid": "3b3d0937-10b7-4141-b73b-15f5059e432d",
+    "last_updated_timestamp": "2025-06-13 08:06:23",
+    "status": "succeed",
+    "params": "scenarios/lawrencium_test_data.yaml",
+    "output": "report/US-ARc/3b3d0937-10b7-4141-b73b-15f5059e432d",
+    "actor": "toanngosy",
+    "process_id": "17660783.0",
+    "state": "2"
   },
   {
-    "uuid": "93597274-1ed2-4e65-bb36-4b7801786d12",
-    "index": "0",
-    "actor": "toanngosy",
-    "last_updated_timestamp": "2025-06-02 18:04:39",
-    "state": "0",
-    "process_id": null,
-    "additional_info": "pending",
-    "run_uuid": null,
     "site_id": "US-ARc",
-    "data_dir": "US-ARc_sample_output",
-    "file_path": "scenarios/test_data.yaml"
+    "server": "nersc",
+    "run_uuid": "963c1a4e-aa6d-4bab-a3fc-ff482f393b7d",
+    "last_updated_timestamp": "2025-06-13 08:03:58",
+    "status": "running",
+    "params": "scenarios/nersc_test_data.yaml",
+    "output": "",
+    "actor": "toanngosy",
+    "process_id": "39575471",
+    "state": "1"
   }
 ]

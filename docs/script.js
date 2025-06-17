@@ -49,39 +49,45 @@ class RunSummaryApp {
         });
 
         document.getElementById('siteFilter').addEventListener('change', () => this.applyFilters());
+        document.getElementById('serverFilter').addEventListener('change', () => this.applyFilters());
         document.getElementById('statusFilter').addEventListener('change', () => this.applyFilters());
         document.getElementById('actorFilter').addEventListener('change', () => this.applyFilters());
         document.getElementById('refreshBtn').addEventListener('click', () => this.init());
     }
 
     populateFilters() {
-        const sites = [...new Set(this.data.map(row => row.site_id))].sort();
+        const sites = [...new Set(this.data.map(row => row.site_id))].filter(Boolean).sort();
         const siteFilter = document.getElementById('siteFilter');
         siteFilter.innerHTML = '<option value="">All Sites</option>';
         sites.forEach(site => {
-            if (site) {
-                siteFilter.innerHTML += `<option value="${site}">${site}</option>`;
-            }
+            siteFilter.innerHTML += `<option value="${site}">${site}</option>`;
         });
 
-        const actors = [...new Set(this.data.map(row => row.actor))].sort();
+        const servers = [...new Set(this.data.map(row => row.server))].filter(Boolean).sort();
+        const serverFilter = document.getElementById('serverFilter');
+        serverFilter.innerHTML = '<option value="">All Servers</option>';
+        servers.forEach(server => {
+            serverFilter.innerHTML += `<option value="${server}">${server}</option>`;
+        });
+
+        const actors = [...new Set(this.data.map(row => row.actor))].filter(Boolean).sort();
         const actorFilter = document.getElementById('actorFilter');
         actorFilter.innerHTML = '<option value="">All Actors</option>';
         actors.forEach(actor => {
-            if (actor) {
-                actorFilter.innerHTML += `<option value="${actor}">${actor}</option>`;
-            }
+            actorFilter.innerHTML += `<option value="${actor}">${actor}</option>`;
         });
     }
 
     applyFilters() {
         const siteFilter = document.getElementById('siteFilter').value;
+        const serverFilter = document.getElementById('serverFilter').value;
         const statusFilter = document.getElementById('statusFilter').value;
         const actorFilter = document.getElementById('actorFilter').value;
 
         this.filteredData = this.data.filter(row => {
             return (!siteFilter || row.site_id === siteFilter) &&
-                   (!statusFilter || row.state === statusFilter) &&
+                   (!serverFilter || row.server === serverFilter) &&
+                   (!statusFilter || row.status === statusFilter) &&
                    (!actorFilter || row.actor === actorFilter);
         });
 
@@ -133,13 +139,13 @@ class RunSummaryApp {
 
     updateSummaryCards() {
         const total = this.filteredData.length;
-        const running = this.filteredData.filter(row => row.state === '1').length;
-        const completed = this.filteredData.filter(row => row.state === '2').length;
-        const failed = this.filteredData.filter(row => row.state === '3').length;
+        const running = this.filteredData.filter(row => row.status === 'running').length;
+        const succeed = this.filteredData.filter(row => row.status === 'succeed').length;
+        const failed = this.filteredData.filter(row => row.status === 'failed').length;
 
         document.getElementById('totalRuns').textContent = total;
         document.getElementById('runningCount').textContent = running;
-        document.getElementById('completedCount').textContent = completed;
+        document.getElementById('succeedCount').textContent = succeed;
         document.getElementById('failedCount').textContent = failed;
     }
 
@@ -153,28 +159,29 @@ class RunSummaryApp {
 
             tr.innerHTML = `
                 <td>${row.site_id || '-'}</td>
+                <td>${row.server || '-'}</td>
                 <td title="${row.run_uuid || '-'}">${this.truncateText(row.run_uuid || '-', 20)}</td>
                 <td>${this.formatTimestamp(row.last_updated_timestamp)}</td>
-                <td>${this.formatStatus(row.state)}</td>
-                <td>${row.actor || '-'}</td>
-                <td>${row.process_id || '-'}</td>
-                <td title="${row.additional_info || '-'}">${this.truncateText(row.additional_info || '-', 30)}</td>
+                <td>${this.formatStatus(row.status)}</td>
+                <td title="${row.params || '-'}">${this.truncateText(row.params || '-', 30)}</td>
+                <td title="${row.output || '-'}">${this.truncateText(row.output || '-', 30)}</td>
             `;
 
             tbody.appendChild(tr);
         });
     }
 
-    formatStatus(state) {
+    formatStatus(status) {
         const statusMap = {
-            '0': { text: 'Pending', class: 'status-pending' },
-            '1': { text: 'Running', class: 'status-running' },
-            '2': { text: 'Completed', class: 'status-completed' },
-            '3': { text: 'Failed', class: 'status-failed' }
+            'pending': { text: 'Pending', class: 'status-pending' },
+            'running': { text: 'Running', class: 'status-running' },
+            'completed': { text: 'Completed', class: 'status-completed' },
+            'succeed': { text: 'Succeed', class: 'status-succeed' },
+            'failed': { text: 'Failed', class: 'status-failed' }
         };
 
-        const status = statusMap[state] || { text: 'Unknown', class: 'status-pending' };
-        return `<span class="status-badge ${status.class}">${status.text}</span>`;
+        const statusInfo = statusMap[status] || { text: status || 'Unknown', class: 'status-pending' };
+        return `<span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>`;
     }
 
     formatTimestamp(timestamp) {
