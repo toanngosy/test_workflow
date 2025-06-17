@@ -1,2 +1,4 @@
 uuid,actor,last_updated_timestamp,updated_by,file_path
+322bd0e9-4006-4044-8a03-bda7e847a8a7,toanngosy,2025-06-13 15:02:19,GH Actions,scenarios/nersc_test_data.yaml
+588fde20-43fb-4019-864f-a08463b309ed,toanngosy,2025-06-13 15:00:55,GH Actions,scenarios/lawrencium_test_data.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,toanngosy,2024-09-10 18:37:32,GH Actions,scenarios/test_data.yaml
