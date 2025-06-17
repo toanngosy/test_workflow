@@ -207,6 +207,28 @@ tr:hover {
     color: white;
 }
 
+/* Data links styling */
+.data-link {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s, text-decoration 0.3s;
+    border-bottom: 1px dotted #3498db;
+}
+
+.data-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+    border-bottom: 1px solid #2980b9;
+}
+
+.data-link:visited {
+    color: #8e44ad;
+}
+
+.data-link:visited:hover {
+    color: #6c3483;
+}
+
 .loading {
     text-align: center;
     padding: 40px;

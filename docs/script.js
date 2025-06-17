@@ -159,12 +159,12 @@ class RunSummaryApp {
 
             tr.innerHTML = `
                 <td>${row.site_id || '-'}</td>
-                <td>${row.server || '-'}</td>
+                <td>${this.formatServerLink(row.server)}</td>
                 <td title="${row.run_uuid || '-'}">${this.truncateText(row.run_uuid || '-', 20)}</td>
                 <td>${this.formatTimestamp(row.last_updated_timestamp)}</td>
                 <td>${this.formatStatus(row.status)}</td>
-                <td title="${row.params || '-'}">${this.truncateText(row.params || '-', 30)}</td>
-                <td title="${row.output || '-'}">${this.truncateText(row.output || '-', 30)}</td>
+                <td>${this.formatParamsLink(row.params)}</td>
+                <td>${this.formatOutputLink(row.output)}</td>
             `;
 
             tbody.appendChild(tr);
@@ -182,6 +182,27 @@ class RunSummaryApp {
 
         const statusInfo = statusMap[status] || { text: status || 'Unknown', class: 'status-pending' };
         return `<span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>`;
+    }
+
+    formatServerLink(server) {
+        if (!server) return '-';
+        const serverPath = `../report/server/${server}`;
+        const truncatedServer = this.truncateText(server, 15);
+        return `<a href="${serverPath}" target="_blank" class="data-link" title="View ${server} server files">${truncatedServer}</a>`;
+    }
+
+    formatParamsLink(params) {
+        if (!params) return '-';
+        const paramsPath = `../${params}`;
+        const truncatedParams = this.truncateText(params, 30);
+        return `<a href="${paramsPath}" target="_blank" class="data-link" title="${params}">${truncatedParams}</a>`;
+    }
+
+    formatOutputLink(output) {
+        if (!output) return '-';
+        const outputPath = `../${output}`;
+        const truncatedOutput = this.truncateText(output, 30);
+        return `<a href="${outputPath}" target="_blank" class="data-link" title="${output}">${truncatedOutput}</a>`;
     }
 
     formatTimestamp(timestamp) {
