@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneFlux Workflow - Run Summary</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> OneFlux Workflow - Run Summary</h1>
+            <p class="subtitle">Monitoring and tracking workflow executions</p>
+        </header>
+
+        <div class="controls">
+            <div class="filter-group">
+                <label for="siteFilter">Filter by Site:</label>
+                <select id="siteFilter">
+                    <option value="">All Sites</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="statusFilter">Filter by Status:</label>
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="0">Pending</option>
+                    <option value="1">Running</option>
+                    <option value="2">Completed</option>
+                    <option value="3">Failed</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="actorFilter">Filter by Actor:</label>
+                <select id="actorFilter">
+                    <option value="">All Actors</option>
+                </select>
+            </div>
+
+            <button id="refreshBtn" class="refresh-btn">
+                <i class="fas fa-sync-alt"></i> Refresh Data
+            </button>
+        </div>
+
+        <div class="summary-cards">
+            <div class="card">
+                <h3>Total Runs</h3>
+                <span id="totalRuns" class="count">0</span>
+            </div>
+            <div class="card">
+                <h3>Running</h3>
+                <span id="runningCount" class="count running">0</span>
+            </div>
+            <div class="card">
+                <h3>Completed</h3>
+                <span id="completedCount" class="count completed">0</span>
+            </div>
+            <div class="card">
+                <h3>Failed</h3>
+                <span id="failedCount" class="count failed">0</span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="runsTable">
+                <thead>
+                    <tr>
+                        <th data-sort="site_id">Site ID <i class="fas fa-sort"></i></th>
+                        <th data-sort="run_uuid">Run UUID <i class="fas fa-sort"></i></th>
+                        <th data-sort="last_updated_timestamp">Timestamp <i class="fas fa-sort"></i></th>
+                        <th data-sort="state">Status <i class="fas fa-sort"></i></th>
+                        <th data-sort="actor">Actor <i class="fas fa-sort"></i></th>
+                        <th data-sort="process_id">Process ID <i class="fas fa-sort"></i></th>
+                        <th data-sort="additional_info">Additional Info <i class="fas fa-sort"></i></th>
+                    </tr>
+                </thead>
+                <tbody id="runsTableBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="loadingSpinner" class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Loading data...
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i> 
+            <span id="errorText">Error loading data</span>
+        </div>
+    </div>
+
+    <footer>
+        <p>Last updated: <span id="lastUpdated">-</span></p>
+        <p>Generated from OneFlux Workflow runs</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
