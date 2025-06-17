@@ -4,6 +4,9 @@ class RunSummaryApp {
         this.filteredData = [];
         this.sortColumn = 'last_updated_timestamp';
         this.sortDirection = 'desc';
+        // GitHub repository configuration
+        this.githubBaseUrl = 'https://github.com/toanngosy/test_workflow';
+        this.githubBranch = 'report';
         this.init();
     }
 
@@ -186,21 +189,21 @@ class RunSummaryApp {
 
     formatServerLink(server) {
         if (!server) return '-';
-        const serverPath = `../report/server/${server}`;
+        const serverPath = `${this.githubBaseUrl}/tree/${this.githubBranch}/report/server/${server}`;
         const truncatedServer = this.truncateText(server, 15);
         return `<a href="${serverPath}" target="_blank" class="data-link" title="View ${server} server files">${truncatedServer}</a>`;
     }
 
     formatParamsLink(params) {
         if (!params) return '-';
-        const paramsPath = `../${params}`;
+        const paramsPath = `${this.githubBaseUrl}/blob/${this.githubBranch}/${params}`;
         const truncatedParams = this.truncateText(params, 30);
         return `<a href="${paramsPath}" target="_blank" class="data-link" title="${params}">${truncatedParams}</a>`;
     }
 
     formatOutputLink(output) {
         if (!output) return '-';
-        const outputPath = `../${output}`;
+        const outputPath = `${this.githubBaseUrl}/tree/${this.githubBranch}/${output}`;
         const truncatedOutput = this.truncateText(output, 30);
         return `<a href="${outputPath}" target="_blank" class="data-link" title="${output}">${truncatedOutput}</a>`;
     }
