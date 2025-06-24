@@ -3,7 +3,7 @@
   "total_scenarios": 3,
   "last_updated": "2025-06-16 19:41:37",
   "status_counts": {
-    "running": 2,
-    "succeed": 1
+    "succeed": 1,
+    "running": 2
   }
 }
