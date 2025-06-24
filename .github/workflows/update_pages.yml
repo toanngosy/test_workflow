@@ -22,6 +22,9 @@ concurrency:
 jobs:
   update-pages:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,7 +42,7 @@ jobs:
 
       - name: Convert CSV reports to JSON
         run: |
-          python gh_side_convert_csv.py
+          python forte/gh_scripts/gh_side_convert_csv.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -51,4 +54,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 
+        uses: actions/deploy-pages@v4
