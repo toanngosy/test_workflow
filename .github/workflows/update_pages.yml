@@ -42,7 +42,7 @@ jobs:
 
       - name: Convert CSV reports to JSON
         run: |
-          python forte/gh_scripts/gh_side_convert_csv.py
+          python gh_side_convert_csv.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
