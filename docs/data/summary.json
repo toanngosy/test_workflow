@@ -1,9 +1,10 @@
 {
-  "total_runs": 3,
-  "total_scenarios": 3,
-  "last_updated": "2025-06-16 19:41:37",
+  "total_runs": 23,
+  "total_scenarios": 5,
+  "last_updated": "2025-06-25 00:21:09",
   "status_counts": {
-    "succeed": 1,
+    "failed": 14,
+    "succeed": 7,
     "running": 2
   }
 }
