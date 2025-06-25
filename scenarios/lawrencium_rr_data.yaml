@@ -1,0 +1,122 @@
+- machine: lawrencium
+  scenarios: 
+    - params:
+        siteid: RR-001
+        datadir: RoundRobin_input/RR-001
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-001/06_meteo_era__input
+    - params:
+        siteid: RR-002
+        datadir: RoundRobin_input/RR-002
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-002/06_meteo_era__input
+    - params:
+        siteid: RR-003
+        datadir: RoundRobin_input/RR-003
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-003/06_meteo_era__input
+    - params:
+        siteid: RR-004
+        datadir: RoundRobin_input/RR-004
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-004/06_meteo_era__input
+    - params:
+        siteid: RR-005
+        datadir: RoundRobin_input/RR-005
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-005/06_meteo_era__input
+    - params:
+        siteid: RR-006
+        datadir: RoundRobin_input/RR-006
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-006/06_meteo_era__input
+    - params:
+        siteid: RR-007
+        datadir: RoundRobin_input/RR-007
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-007/06_meteo_era__input
+    - params:
+        siteid: RR-008
+        datadir: RoundRobin_input/RR-008
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-008/06_meteo_era__input
+    - params:
+        siteid: RR-009
+        datadir: RoundRobin_input/RR-009
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-009/06_meteo_era__input
+    - params:
+        siteid: RR-010
+        datadir: RoundRobin_input/RR-010
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: /global/home/users/sytoanngo/ONEFlux/data/RoundRobin_input/RR-010/06_meteo_era__input
