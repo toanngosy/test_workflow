@@ -1,4 +1,4 @@
-- machine: lawrencium
+- machine: rocky
   scenarios: 
     - params:
         siteid: RR-001
