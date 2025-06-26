@@ -1,13 +1,23 @@
-# Generalized Job Execution System with GitHub Actions Integration
+# FORTE: Flexible ONEFlux Run Tracker and Evaluator
 
-This repository provides a comprehensive job execution system that integrates GitHub Actions with external server-side intensive task processing. The system has been completely refactored to provide a generalized, configurable job execution framework supporting multiple schedulers and workflow types.
+**FORTE** is a comprehensive job execution system that integrates GitHub Actions with external server-side intensive task processing. The system provides a generalized, configurable job execution framework supporting multiple schedulers and workflow types, specifically designed for ONEFlux ecosystem workflows and data processing pipelines.
+
+## What is FORTE?
+
+**F**lexible **O**NEFlux **R**un **T**racker and **E**valuator - A modern, extensible workflow management system that:
+
+- 🔄 **Tracks** ONEFlux pipeline executions across multiple compute environments
+- 📊 **Evaluates** job performance and resource utilization
+- 🚀 **Automates** workflow orchestration through GitHub Actions integration
+- 🔧 **Adapts** to different HPC schedulers (SLURM, Local, and more)
+- 📈 **Scales** from development laptops to production supercomputers
 
 ## Overview
 
 The system operates on two main levels:
 
 1. **GitHub Actions Integration**: Automated workflow triggering and result reporting through GitHub Actions
-2. **Server-Side Job Execution**: A generalized job execution system supporting multiple schedulers (SLURM, PBS, Local) and workflow types
+2. **Server-Side Job Execution**: A generalized job execution system supporting multiple schedulers (SLURM, Local) and workflow types
 
 ### Workflow Process
 
@@ -32,7 +42,6 @@ The complete process flow:
 
 ### Multiple Scheduler Support
 - **SLURM** - Production HPC workload manager
-- **PBS/Torque** - Alternative HPC scheduler 
 - **Local** - Direct subprocess execution for testing/development
 - **Extensible** - Easy to add new schedulers (Kubernetes, cloud services, etc.)
 
@@ -57,24 +66,27 @@ The complete process flow:
 ## Project Structure
 
 ```
-project/
-├── job_system/                    # Core job system package
+forte/
+├── forte/                         # Main FORTE package
 │   ├── __init__.py
-│   ├── base.py                    # Abstract base classes
-│   ├── schedulers.py              # Scheduler implementations
-│   ├── workflows.py               # Workflow implementations  
-│   └── manager.py                 # JobManager orchestrator
-├── templates/                     # Jinja2 job script templates
-│   ├── slurm_job.sh.j2           # SLURM job template
-│   └── local_job.sh.j2           # Local execution template
+│   ├── main.py                    # Main entry point
+│   ├── constants.py               # System constants
+│   ├── job_system/                # Core job system package
+│   │   ├── __init__.py
+│   │   ├── base.py                # Abstract base classes
+│   │   ├── schedulers.py          # Scheduler implementations
+│   │   ├── workflows.py           # Workflow implementations  
+│   │   └── manager.py             # JobManager orchestrator
+│   ├── utils/                     # Utility modules
+│   │   └── logger.py              # Logging configuration
+│   ├── templates/                 # Jinja2 job script templates
+│   └── gh_scripts/                # GitHub integration scripts
 ├── scenarios/                     # Scenario configuration files
-│   ├── enhanced_test_data.yaml   # Example scenarios
-│   └── test_data.yaml            # Original scenarios
+├── docs/                          # Documentation and web interface
 ├── config.yaml                   # Main configuration file
 ├── config_template.yaml          # Configuration template
-├── server_side_run.py            # Main execution script
-├── server_side_run_refactored.py # Refactored main script
-├── test_job_system.py            # Test script
+├── setup.py                      # Package installation setup
+├── requirements.txt               # Python dependencies
 └── README.md                     # This documentation
 ```
 
@@ -87,7 +99,7 @@ The system uses YAML configuration files. Create your `config.yaml` from `config
 ```yaml
 # Scheduler configuration
 scheduler:
-  type: "slurm"  # Options: slurm, pbs, local, kubernetes
+  type: "slurm"  # Options: slurm, local, kubernetes
   
   slurm:
     default_params:
@@ -170,11 +182,11 @@ Define your workflows in scenario files:
    cd test_workflow
    ```
 
-2. **Create virtual environment and install dependencies**:
+2. **Create virtual environment and install FORTE**:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
+   pip install -e .  # Install FORTE in development mode
    ```
 
 3. **Create environment file** (`.env`):
@@ -191,11 +203,39 @@ Define your workflows in scenario files:
    # Edit config.yaml with your specific settings
    ```
 
-5. **Set up cron job** to run the server-side script:
+5. **Set up cron job** to run FORTE:
    ```bash
    # Add to crontab (adjust timing as needed)
-   */25 * * * * cd /path/to/test_workflow && source venv/bin/activate && python server_side_run.py
+   */25 * * * * cd /path/to/test_workflow && source venv/bin/activate && forte
    ```
+
+## Usage
+
+After installation, you can run FORTE in several ways:
+
+### Command Line Interface
+```bash
+# Run FORTE with default config
+forte
+
+# Use custom configuration file
+forte --config my_config.yaml
+
+# Show help
+forte --help
+
+# Show version
+forte --version
+```
+
+### Direct Python Execution
+```bash
+# Run as module
+python -m forte.main
+
+# Run script directly
+python forte/main.py
+```
 
 ### GitHub Setup
 
@@ -336,11 +376,7 @@ The system maintains compatibility with existing logs through status mapping:
 - Real-time status tracking via process polling
 - Graceful job termination with proper cleanup
 
-### PBS Scheduler
-- qsub submission with parameter support
-- qstat status checking
-- qdel job cancellation
-- Output file collection (.o/.e files)
+
 
 ## Error Handling
 
@@ -356,7 +392,7 @@ The system provides comprehensive error handling:
 
 | Aspect | Original | Refactored |
 |--------|----------|------------|
-| **Scheduler Support** | SLURM only | SLURM, PBS, Local, extensible |
+| **Scheduler Support** | SLURM only | SLURM, Local, extensible |
 | **Workflow Types** | OneFlux only | OneFlux, Python, Scripts, extensible |
 | **Configuration** | Hardcoded paths | YAML-driven, validated |
 | **Job Scripts** | Hardcoded template | Jinja2 templates |

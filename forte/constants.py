@@ -2,7 +2,10 @@
 Constants for job states and status mappings.
 """
 
-from job_system.base import JobStatus
+try:
+    from .job_system.base import JobStatus
+except ImportError:
+    from forte.job_system.base import JobStatus
 
 # State constants for job workflow
 STATE_PENDING = 0

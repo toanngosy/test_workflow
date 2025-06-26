@@ -12,17 +12,24 @@ from uuid import uuid4
 import time
 import yaml
 import logging
-from utils.logger import log_config
-
-# Import our new job system
-from job_system.manager import JobManager
-from job_system.base import JobStatus
-
-# Import constants
-from constants import (
-    STATE_PENDING, STATE_RUNNING, STATE_COMPLETED, STATE_FAILED, STATE_EXTERNAL_FAILED,
-    STATUS_DICT, JOB_STATUS_MAPPING
-)
+try:
+    # Try relative imports (when run as module)
+    from .utils.logger import log_config
+    from .job_system.manager import JobManager
+    from .job_system.base import JobStatus
+    from .constants import (
+        STATE_PENDING, STATE_RUNNING, STATE_COMPLETED, STATE_FAILED, STATE_EXTERNAL_FAILED,
+        STATUS_DICT, JOB_STATUS_MAPPING
+    )
+except ImportError:
+    # Fallback to absolute imports (when run directly)
+    from forte.utils.logger import log_config
+    from forte.job_system.manager import JobManager
+    from forte.job_system.base import JobStatus
+    from forte.constants import (
+        STATE_PENDING, STATE_RUNNING, STATE_COMPLETED, STATE_FAILED, STATE_EXTERNAL_FAILED,
+        STATUS_DICT, JOB_STATUS_MAPPING
+    )
 
 log = logging.getLogger(__name__)
 DEFAULT_LOGGING_FILENAME = 'server_side_run.log'
@@ -449,7 +456,46 @@ class FlowManager:
             return None, None, message
 
 
-if __name__ == '__main__':
+def main():
+    """Main entry point for FORTE: Flexible ONEFlux Run Tracker and Evaluator"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(
+        description="FORTE: Flexible ONEFlux Run Tracker and Evaluator",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  forte                    # Run FORTE with default configuration
+  forte --config custom.yaml  # Use custom configuration file
+  forte --help             # Show this help message
+  forte --version          # Show FORTE version
+
+Environment Variables:
+  TOKEN    GitHub personal access token
+  REPO     GitHub repository (format: username/repo)
+  BRANCH   GitHub branch name (default: report)
+
+About:
+  FORTE (Flexible ONEFlux Run Tracker and Evaluator) is a comprehensive
+  job execution system for managing ONEFlux ecosystem workflows with
+  GitHub Actions integration and multi-scheduler support.
+        """
+    )
+    
+    parser.add_argument(
+        '--config', 
+        default='config.yaml',
+        help='Path to configuration file (default: config.yaml)'
+    )
+    
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='FORTE 0.1.0'
+    )
+    
+    args = parser.parse_args()
+    
     load_dotenv()
     
     # Get GitHub configuration from environment variables
@@ -475,7 +521,7 @@ if __name__ == '__main__':
         exit(1)
     
     # Read job system configuration
-    config_path = 'config.yaml'
+    config_path = args.config
     if not Path(config_path).exists():
         log.error(f"Configuration file not found: {config_path}")
         log.error("Please ensure config.yaml exists with proper job system configuration")
@@ -515,4 +561,8 @@ if __name__ == '__main__':
         
     except Exception as e:
         log.error(f"Error during execution: {e}")
-        exit(1) 
+        exit(1)
+
+
+if __name__ == '__main__':
+    main() 

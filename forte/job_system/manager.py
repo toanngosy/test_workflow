@@ -9,9 +9,14 @@ from typing import Dict, Any, Tuple, Optional, List
 from uuid import uuid4
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
-from .base import JobScheduler, WorkflowType, JobStatus
-from .schedulers import SlurmScheduler, LocalScheduler, PBSScheduler
-from .workflows import OneFluxWorkflow, GenericPythonWorkflow, CustomScriptWorkflow
+try:
+    from .base import JobScheduler, WorkflowType, JobStatus
+    from .schedulers import SlurmScheduler, LocalScheduler
+    from .workflows import OneFluxWorkflow, GenericPythonWorkflow, CustomScriptWorkflow
+except ImportError:
+    from forte.job_system.base import JobScheduler, WorkflowType, JobStatus
+    from forte.job_system.schedulers import SlurmScheduler, LocalScheduler
+    from forte.job_system.workflows import OneFluxWorkflow, GenericPythonWorkflow, CustomScriptWorkflow
 
 
 class JobManager:
@@ -56,7 +61,6 @@ class JobManager:
         
         schedulers = {
             'slurm': SlurmScheduler,
-            'pbs': PBSScheduler,
             'local': LocalScheduler
         }
         

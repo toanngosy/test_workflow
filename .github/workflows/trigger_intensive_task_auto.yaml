@@ -24,4 +24,4 @@ jobs:
     - name: Wait for acknowledge signal
       id: ack-signal
       run: |
-        report_url=$(python gh_side_inf_loop.py)
+        report_url=$(python forte/gh_scripts/gh_side_inf_loop.py)

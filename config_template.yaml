@@ -2,12 +2,12 @@
 # Copy this file to config.yaml and customize the values for your environment
 
 scheduler:
-  type: "slurm"  # Options: slurm, pbs, local, kubernetes
+  type: "local"  # Options: slurm, local, kubernetes
   
   slurm:
     default_params:
       qos: "regular"                    # Quality of Service (QoS) for SLURM jobs
-      time: "01:00:00"                  # Maximum wall time (HH:MM:SS)
+      time: "20-00:00:00"              # Maximum wall time (DD-HH:MM:SS) - 20 days
       nodes: 1                          # Number of nodes to allocate
       constraint: "cpu"                 # Node constraint (e.g., cpu, gpu, haswell)
       tasks_per_node: 1                 # Number of tasks per node
@@ -17,13 +17,7 @@ scheduler:
     template: "slurm_job.sh.j2"         # Jinja2 template for SLURM job scripts
     output_dir: "/path/to/your/output"  # Directory for job outputs and scripts
     
-  pbs:
-    default_params:
-      walltime: "01:00:00"              # Maximum wall time for PBS jobs
-      nodes: 1                          # Number of nodes to allocate
-      queue: "batch"                    # PBS queue name
-    template: "pbs_job.sh.j2"           # Jinja2 template for PBS job scripts
-    
+
   local:
     max_concurrent_jobs: 4              # Maximum number of concurrent local jobs
     working_directory: "/tmp/local_jobs" # Working directory for local execution

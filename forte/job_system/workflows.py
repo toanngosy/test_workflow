@@ -6,7 +6,10 @@ from typing import Dict, Any, Tuple, List
 from pathlib import Path
 import os
 
-from .base import WorkflowType
+try:
+    from .base import WorkflowType
+except ImportError:
+    from forte.job_system.base import WorkflowType
 
 
 class OneFluxWorkflow(WorkflowType):
