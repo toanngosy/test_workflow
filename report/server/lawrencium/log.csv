@@ -1,4 +1,5 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+12307596-7dbc-4d5b-abc1-731e1ce93a8b,5,toanngosy,2025-06-30 09:34:26,2,17785182.0,report/RR-006/REPORT_b94b34a5-8463-4f87-9148-04e92d9e3dd8.log,b94b34a5-8463-4f87-9148-04e92d9e3dd8,RR-006,$SCRATCH/data/RoundRobin_input/RR-006,scenarios/lawrencium_rr_data_06262025.yaml
 12307596-7dbc-4d5b-abc1-731e1ce93a8b,4,toanngosy,2025-06-30 09:34:11,2,17785181.0,report/RR-005/REPORT_6e0b571e-8dc1-4819-81b6-8bb33e937dcc.log,6e0b571e-8dc1-4819-81b6-8bb33e937dcc,RR-005,$SCRATCH/data/RoundRobin_input/RR-005,scenarios/lawrencium_rr_data_06262025.yaml
 12307596-7dbc-4d5b-abc1-731e1ce93a8b,3,toanngosy,2025-06-30 09:33:52,2,17785180.0,report/RR-004/REPORT_bc8ba6fa-abb2-4732-9d0b-f0deedada7a7.log,bc8ba6fa-abb2-4732-9d0b-f0deedada7a7,RR-004,$SCRATCH/data/RoundRobin_input/RR-004,scenarios/lawrencium_rr_data_06262025.yaml
 12307596-7dbc-4d5b-abc1-731e1ce93a8b,1,toanngosy,2025-06-30 09:33:23,3,17785178.0,failed,bdf7e455-5d25-4350-9b08-613fed9b005b,RR-002,$SCRATCH/data/RoundRobin_input/RR-002,scenarios/lawrencium_rr_data_06262025.yaml
