@@ -1,5 +1,6 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
-a9a6b2e3-ba04-4a28-8984-151dcdd69513,1,toanngosy,2025-07-08 13:21:41,1,1238026,running,89e7d490-00b7-446a-adcc-450862705382,RR-002,$HOME/ONEFlux/data/RoundRobin_input/RR-002,scenarios/rocky_rr_data_07082025.yaml
+a9a6b2e3-ba04-4a28-8984-151dcdd69513,2,toanngosy,2025-07-08 13:21:44,1,1238277,running,fc32c452-aed4-4705-9d7b-942fad6402c7,RR-003,$HOME/ONEFlux/data/RoundRobin_input/RR-003,scenarios/rocky_rr_data_07082025.yaml
+a9a6b2e3-ba04-4a28-8984-151dcdd69513,1,toanngosy,2025-07-08 13:21:41,1,1238026.0,running,89e7d490-00b7-446a-adcc-450862705382,RR-002,$HOME/ONEFlux/data/RoundRobin_input/RR-002,scenarios/rocky_rr_data_07082025.yaml
 a9a6b2e3-ba04-4a28-8984-151dcdd69513,0,toanngosy,2025-07-08 13:21:38,1,1237821.0,running,44d3a4c2-2a8b-4524-9dcd-11990b910510,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,scenarios/rocky_rr_data_07082025.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-07-08 13:21:35,1,1237605.0,running,e71af162-3c82-4cc8-9479-9821c7e98535,US-ARc,US-ARc_sample_output,scenarios/test_data.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-07-08 13:21:32,0,,pending,,US-ARc,US-ARc_sample_output,scenarios/test_data.yaml
