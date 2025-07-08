@@ -1,5 +1,6 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
-a9a6b2e3-ba04-4a28-8984-151dcdd69513,5,toanngosy,2025-07-08 13:21:53,1,1239025,running,77b276bc-eb29-4a13-a6a3-d5ab0b94d8da,RR-006,$HOME/ONEFlux/data/RoundRobin_input/RR-006,scenarios/rocky_rr_data_07082025.yaml
+a9a6b2e3-ba04-4a28-8984-151dcdd69513,6,toanngosy,2025-07-08 13:21:56,1,1239278,running,0846db70-d312-4830-aff2-ad353c1cf401,RR-007,$HOME/ONEFlux/data/RoundRobin_input/RR-007,scenarios/rocky_rr_data_07082025.yaml
+a9a6b2e3-ba04-4a28-8984-151dcdd69513,5,toanngosy,2025-07-08 13:21:53,1,1239025.0,running,77b276bc-eb29-4a13-a6a3-d5ab0b94d8da,RR-006,$HOME/ONEFlux/data/RoundRobin_input/RR-006,scenarios/rocky_rr_data_07082025.yaml
 a9a6b2e3-ba04-4a28-8984-151dcdd69513,4,toanngosy,2025-07-08 13:21:50,1,1238783.0,running,47b502e0-2059-4ff8-931a-5714c8b6f452,RR-005,$HOME/ONEFlux/data/RoundRobin_input/RR-005,scenarios/rocky_rr_data_07082025.yaml
 a9a6b2e3-ba04-4a28-8984-151dcdd69513,3,toanngosy,2025-07-08 13:21:47,1,1238503.0,running,aedd5a54-fc68-4b7b-9cc2-e0398571378a,RR-004,$HOME/ONEFlux/data/RoundRobin_input/RR-004,scenarios/rocky_rr_data_07082025.yaml
 a9a6b2e3-ba04-4a28-8984-151dcdd69513,2,toanngosy,2025-07-08 13:21:44,1,1238277.0,running,fc32c452-aed4-4705-9d7b-942fad6402c7,RR-003,$HOME/ONEFlux/data/RoundRobin_input/RR-003,scenarios/rocky_rr_data_07082025.yaml
