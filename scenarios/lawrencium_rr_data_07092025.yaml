@@ -1,0 +1,122 @@
+- machine: rocky
+  scenarios: 
+    - params:
+        siteid: RR-001
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-001
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-001/06_meteo_era__input
+    - params:
+        siteid: RR-002
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-002
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-002/06_meteo_era__input
+    - params:
+        siteid: RR-003
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-003
+        firstyear: 2004
+        lastyear: 2023
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-003/06_meteo_era__input
+    - params:
+        siteid: RR-004
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-004
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-004/06_meteo_era__input
+    - params:
+        siteid: RR-005
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-005
+        firstyear: 2010
+        lastyear: 2022
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-005/06_meteo_era__input
+    - params:
+        siteid: RR-006
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-006
+        firstyear: 2015
+        lastyear: 2020
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-006/06_meteo_era__input
+    - params:
+        siteid: RR-007
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-007
+        firstyear: 2006
+        lastyear: 2020
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-007/06_meteo_era__input
+    - params:
+        siteid: RR-008
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-008
+        firstyear: 2020
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-008/06_meteo_era__input
+    - params:
+        siteid: RR-009
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-009
+        firstyear: 2019
+        lastyear: 2024
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-009/06_meteo_era__input
+    - params:
+        siteid: RR-010
+        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-010
+        firstyear: 2014
+        lastyear: 2019
+      custom_params: 
+        recint: hh
+        era-fy: 1981
+        era-ly: 2024
+        versionp: RR
+        versiond: 1
+        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-010/06_meteo_era__input
