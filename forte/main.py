@@ -298,11 +298,21 @@ class FlowManager:
 
     def upload_run_result(self, site_id, data_dir, run_uuid, process_id):
         """Upload job results using JobManager to get output files"""
+        
+        def get_last_n_lines(file_path, n=100):
+            """Helper function to read only the last N lines of a file"""
+            try:
+                with open(file_path, 'r') as f:
+                    lines = f.readlines()
+                    return ''.join(lines[-n:]) if len(lines) > n else ''.join(lines)
+            except Exception as e:
+                log.error(f"Error reading file {file_path}: {e}")
+                return ""
+        
         try:
-            # Upload original log file
+            # Upload original log file (last 100 lines only)
             content_file = Path(self.oneflux_path)/f'{run_uuid}.log'
-            with open(content_file, 'r') as f:
-                content = f.read()
+            content = get_last_n_lines(content_file, 100)
             file_status = self.repo.create_file(f'report/{site_id}/{run_uuid}/REPORT.log',
                                                 f'generate report {run_uuid}',
                                                 content, branch=self.branch)
@@ -317,13 +327,12 @@ class FlowManager:
             base_tree = self.repo.get_git_tree(master_sha)
             commit_message = f'Upload results for job {run_uuid}'
             
-            # Upload job output files
+            # Upload job output files (last 100 lines only)
             for output_file in output_files:
                 file_path = Path(output_file)
                 if file_path.exists():
                     file_name = file_path.name
-                    with open(file_path, 'r') as f:
-                        data = f.read()
+                    data = get_last_n_lines(file_path, 100)
                     
                     # Create blob and add to element list for commit
                     blob = self.repo.create_git_blob(data, 'base64')
@@ -336,7 +345,7 @@ class FlowManager:
                     element_list.append(element)
             
             # Continue with uploading image files
-            output_img_path = Path(self.oneflux_path)/'data'/data_dir/'99_fluxnet2015'
+            output_img_path = Path(data_dir)/'99_fluxnet2015'
             png_files = list(output_img_path.glob('*.png'))
             
             for entry in png_files:
@@ -363,7 +372,6 @@ class FlowManager:
             
             updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             additional_info = f'report/{site_id}/REPORT_{run_uuid}.log'
-            
             return True, additional_info
         except Exception as e:
             log.error(f"Error uploading results: {e}")

@@ -137,50 +137,45 @@ class LocalScheduler(JobScheduler):
         """Execute job locally using subprocess"""
         try:
             if not self.is_available():
+                print(f"DEBUG: Scheduler not available")
                 return None, False
                 
-            # Start the process first to get the PID
-            process = subprocess.Popen(
-                ['bash', str(job_script_path)],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                cwd=self.working_dir,
-                preexec_fn=os.setsid,
-                # start_new_session=True,
-                # close_fds=True
-            )
+            # Create output files first
+            temp_job_id = str(int(time.time() * 1000000))  # Temporary ID for file creation
+            stdout_file = self.working_dir / f"{temp_job_id}.out"
+            stderr_file = self.working_dir / f"{temp_job_id}.err"
             
-            # Get the actual PID
+            print(f"DEBUG: Created temporary files: {stdout_file}, {stderr_file}")
+            
+            # Open files for direct redirection
+            with open(stdout_file, 'w') as stdout_f, open(stderr_file, 'w') as stderr_f:
+                # Start the process with direct file redirection
+                print(f"DEBUG: Starting process with script: {job_script_path}")
+                process = subprocess.Popen(
+                    ['bash', str(job_script_path)],
+                    stdout=stdout_f,
+                    stderr=stderr_f,
+                    cwd=self.working_dir,
+                    start_new_session=True
+                )
+            
+            # Get the actual PID and rename output files
             job_id = str(process.pid)
+            actual_stdout_file = self.working_dir / f"{job_id}.out"
+            actual_stderr_file = self.working_dir / f"{job_id}.err"
             
-            # Create output files with the actual PID
-            stdout_file = self.working_dir / f"{job_id}.out"
-            stderr_file = self.working_dir / f"{job_id}.err"
+            print(f"DEBUG: Process started with PID: {job_id}")
             
-            # Start a background thread to capture output
-            def capture_output():
-                try:
-                    stdout, stderr = process.communicate()
-                    
-                    # Write output to files
-                    with open(stdout_file, 'w') as f:
-                        f.write(stdout.decode('utf-8', errors='replace'))
-                    
-                    with open(stderr_file, 'w') as f:
-                        f.write(stderr.decode('utf-8', errors='replace'))
-                except Exception:
-                    # If we can't capture output, at least create empty files
-                    stdout_file.touch()
-                    stderr_file.touch()
+            # Rename files to use actual PID
+            stdout_file.rename(actual_stdout_file)
+            stderr_file.rename(actual_stderr_file)
             
-            # Start the output capture thread
-            thread = threading.Thread(target=capture_output)
-            thread.daemon = True
-            thread.start()
+            print(f"DEBUG: Renamed output files to: {actual_stdout_file}, {actual_stderr_file}")
             
             return job_id, True
             
-        except (subprocess.SubprocessError, OSError):
+        except (subprocess.SubprocessError, OSError) as e:
+            print(f"DEBUG: Exception in submit_job: {e}")
             return None, False
     
     def check_job_status(self, job_id: str) -> JobStatus:
