@@ -1,12 +1,5 @@
 uuid,actor,last_updated_timestamp,updated_by,file_path
 fbea0844-f353-4d01-98cc-53351a758651,toanngosy,2025-07-09 18:08:43,GH Actions,scenarios/lawrencium_rr_data_07092025.yaml
-465ebea5-b330-418e-95b7-b88c6157d6f1,toanngosy,2025-07-09 18:06:05,GH Actions,scenarios/lawrencium_rr_data_07092025.yaml
-97fc7c1e-4ae5-4d7c-95ba-ecbd45f5e5c6,toanngosy,2025-07-09 18:04:58,GH Actions,scenarios/lawrencium_rr_data_07092025.yaml
 a9a6b2e3-ba04-4a28-8984-151dcdd69513,toanngosy,2025-07-08 20:13:41,GH Actions,scenarios/rocky_rr_data_07082025.yaml
-12307596-7dbc-4d5b-abc1-731e1ce93a8b,toanngosy,2025-06-26 18:11:06,GH Actions,scenarios/lawrencium_rr_data_06262025.yaml
-e33987b8-0cef-45aa-960d-7f74da19a8c6,toanngosy,2025-06-25 15:29:05,GH Actions,scenarios/lawrencium_rr_data_year_fix.yaml
-6d3f4897-5a54-423b-a8b8-544ff5284ddc,toanngosy,2025-06-24 18:48:07,GH Actions,scenarios/lawrencium_rr_data_new.yaml
-5f2ff6cb-4dd3-41b0-a74d-e6410890d625,toanngosy,2025-06-24 11:00:42,GH Actions,scenarios/lawrencium_rr_data.yaml
 322bd0e9-4006-4044-8a03-bda7e847a8a7,toanngosy,2025-06-13 15:02:19,GH Actions,scenarios/nersc_test_data.yaml
-588fde20-43fb-4019-864f-a08463b309ed,toanngosy,2025-06-13 15:00:55,GH Actions,scenarios/lawrencium_test_data.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,toanngosy,2024-09-10 18:37:32,GH Actions,scenarios/test_data.yaml
