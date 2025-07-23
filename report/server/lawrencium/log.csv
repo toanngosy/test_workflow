@@ -1,3 +1,4 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
-e7d25506-46a0-47f1-a75b-a85b65c2ffbf,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-23 08:53:39,0,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,
-e7d25506-46a0-47f1-a75b-a85b65c2ffbf,1,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-23 08:53:39,0,pending,,RR-002,$SCRATCH/data/RoundRobin_input/RR-002,
+uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+e7d25506-46a0-47f1-a75b-a85b65c2ffbf,0,toanngosy,2025-07-23 08:53:42,1,18155928,running,b5c5614a-1ff0-4fd1-a919-6bdb6e126ba1,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+e7d25506-46a0-47f1-a75b-a85b65c2ffbf,0,toanngosy,2025-07-23 08:53:39,0,,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+e7d25506-46a0-47f1-a75b-a85b65c2ffbf,1,toanngosy,2025-07-23 08:53:39,0,,pending,,RR-002,$SCRATCH/data/RoundRobin_input/RR-002,scenarios/lawrencium_rr_data_07092025.yaml
