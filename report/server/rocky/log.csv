@@ -1,8 +1,18 @@
-uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
-a9a6b2e3-ba04-4a28-8984-151dcdd69513,0,toanngosy,2025-07-23 08:20:46,2,95915.0,report/RR-001/REPORT_48538759-3651-484b-9537-fec7db035adc.log,48538759-3651-484b-9537-fec7db035adc,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,scenarios/rocky_rr_data_07082025.yaml
-a9a6b2e3-ba04-4a28-8984-151dcdd69513,0,toanngosy,2025-07-23 07:56:41,1,95915.0,running,48538759-3651-484b-9537-fec7db035adc,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,scenarios/rocky_rr_data_07082025.yaml
-9b2d837a-552a-412a-b0f8-8e1d73375b5e,0,toanngosy,2025-07-23 07:56:38,1,95682.0,running,b303a183-22e0-4f3f-a8f4-3109ff5d3529,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,scenarios/rocky_rr_data_07082025.yaml
-93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-07-23 07:56:35,1,95501.0,running,80a05a98-cdc0-4093-b3ba-a252b21a108c,US-ARc,US-ARc_sample_output,scenarios/test_data.yaml
-9b2d837a-552a-412a-b0f8-8e1d73375b5e,0,toanngosy,2025-07-23 07:56:32,0,,pending,,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,scenarios/rocky_rr_data_07082025.yaml
-93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-07-23 07:56:31,0,,pending,,US-ARc,US-ARc_sample_output,scenarios/test_data.yaml
-a9a6b2e3-ba04-4a28-8984-151dcdd69513,0,toanngosy,2025-07-23 07:56:31,0,,pending,,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,scenarios/rocky_rr_data_07082025.yaml
+uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
+3a034730-437d-42d1-8682-3f7f4162004e,0,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,
+3a034730-437d-42d1-8682-3f7f4162004e,1,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-002,$HOME/ONEFlux/data/RoundRobin_input/RR-002,
+3a034730-437d-42d1-8682-3f7f4162004e,2,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-003,$HOME/ONEFlux/data/RoundRobin_input/RR-003,
+3a034730-437d-42d1-8682-3f7f4162004e,3,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-004,$HOME/ONEFlux/data/RoundRobin_input/RR-004,
+3a034730-437d-42d1-8682-3f7f4162004e,4,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-005,$HOME/ONEFlux/data/RoundRobin_input/RR-005,
+3a034730-437d-42d1-8682-3f7f4162004e,5,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-006,$HOME/ONEFlux/data/RoundRobin_input/RR-006,
+3a034730-437d-42d1-8682-3f7f4162004e,6,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-007,$HOME/ONEFlux/data/RoundRobin_input/RR-007,
+3a034730-437d-42d1-8682-3f7f4162004e,7,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-008,$HOME/ONEFlux/data/RoundRobin_input/RR-008,
+3a034730-437d-42d1-8682-3f7f4162004e,8,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-009,$HOME/ONEFlux/data/RoundRobin_input/RR-009,
+3a034730-437d-42d1-8682-3f7f4162004e,9,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:24:42,0,pending,,RR-010,$HOME/ONEFlux/data/RoundRobin_input/RR-010,
+a9a6b2e3-ba04-4a28-8984-151dcdd69513,0,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 08:20:46,2,report/RR-001/REPORT_48538759-3651-484b-9537-fec7db035adc.log,48538759-3651-484b-9537-fec7db035adc,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,95915.0
+a9a6b2e3-ba04-4a28-8984-151dcdd69513,0,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 07:56:41,1,running,48538759-3651-484b-9537-fec7db035adc,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,95915.0
+9b2d837a-552a-412a-b0f8-8e1d73375b5e,0,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 07:56:38,1,running,b303a183-22e0-4f3f-a8f4-3109ff5d3529,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,95682.0
+93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,scenarios/test_data.yaml,2025-07-23 07:56:35,1,running,80a05a98-cdc0-4093-b3ba-a252b21a108c,US-ARc,US-ARc_sample_output,95501.0
+9b2d837a-552a-412a-b0f8-8e1d73375b5e,0,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 07:56:32,0,pending,,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,
+93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,scenarios/test_data.yaml,2025-07-23 07:56:31,0,pending,,US-ARc,US-ARc_sample_output,
+a9a6b2e3-ba04-4a28-8984-151dcdd69513,0,toanngosy,scenarios/rocky_rr_data_07082025.yaml,2025-07-23 07:56:31,0,pending,,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,
