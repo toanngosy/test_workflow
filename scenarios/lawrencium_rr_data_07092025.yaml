@@ -14,7 +14,7 @@
         era-source: $SCRATCH/data/RoundRobin_input/RR-001/06_meteo_era__input
     - params:
         siteid: RR-002
-        datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-002
+        datadir: $SCRATCH/data/RoundRobin_input/RR-002
         firstyear: 2020
         lastyear: 2024
       custom_params: 
@@ -23,4 +23,4 @@
         era-ly: 2024
         versionp: RR
         versiond: 1
-        era-source: $HOME/ONEFlux/data/RoundRobin_input/RR-002/06_meteo_era__input
+        era-source: $SCRATCH/data/RoundRobin_input/RR-002/06_meteo_era__input
