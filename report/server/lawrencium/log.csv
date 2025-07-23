@@ -1,9 +1,10 @@
-uuid,index,actor,file_path,last_updated_timestamp,state,additional_info,run_uuid,site_id,data_dir,process_id
-e7d25506-46a0-47f1-a75b-a85b65c2ffbf,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-23 08:39:05,0,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,
-e7d25506-46a0-47f1-a75b-a85b65c2ffbf,1,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-23 08:39:05,0,pending,,RR-002,$HOME/ONEFlux/data/RoundRobin_input/RR-002,
-c1075141-931f-4d52-95a2-05daf3b4a3aa,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-10 12:32:12,2,report/RR-001/REPORT_509d4033-d76a-4fdc-a544-ec47c36bf2cf.log,509d4033-d76a-4fdc-a544-ec47c36bf2cf,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,17978582.0
-fbea0844-f353-4d01-98cc-53351a758651,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-10 09:12:36,3,failed,50991c2d-3412-456e-af62-3215940ffb6c,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,17978583.0
-fbea0844-f353-4d01-98cc-53351a758651,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-09 13:34:35,1,running,50991c2d-3412-456e-af62-3215940ffb6c,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,17978583.0
-c1075141-931f-4d52-95a2-05daf3b4a3aa,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-09 13:34:32,1,running,509d4033-d76a-4fdc-a544-ec47c36bf2cf,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,17978582.0
-fbea0844-f353-4d01-98cc-53351a758651,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-09 13:34:28,0,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,
-c1075141-931f-4d52-95a2-05daf3b4a3aa,0,toanngosy,scenarios/lawrencium_rr_data_07092025.yaml,2025-07-09 13:34:28,0,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,
+uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+e7d25506-46a0-47f1-a75b-a85b65c2ffbf,0,toanngosy,2025-07-23 08:39:08,1,18155767,running,02cc666e-6bd4-4f7d-94f7-098de2eddce7,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+e7d25506-46a0-47f1-a75b-a85b65c2ffbf,0,toanngosy,2025-07-23 08:39:05,0,,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+e7d25506-46a0-47f1-a75b-a85b65c2ffbf,1,toanngosy,2025-07-23 08:39:05,0,,pending,,RR-002,$HOME/ONEFlux/data/RoundRobin_input/RR-002,scenarios/lawrencium_rr_data_07092025.yaml
+c1075141-931f-4d52-95a2-05daf3b4a3aa,0,toanngosy,2025-07-10 12:32:12,2,17978582.0,report/RR-001/REPORT_509d4033-d76a-4fdc-a544-ec47c36bf2cf.log,509d4033-d76a-4fdc-a544-ec47c36bf2cf,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+fbea0844-f353-4d01-98cc-53351a758651,0,toanngosy,2025-07-10 09:12:36,3,17978583.0,failed,50991c2d-3412-456e-af62-3215940ffb6c,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+fbea0844-f353-4d01-98cc-53351a758651,0,toanngosy,2025-07-09 13:34:35,1,17978583.0,running,50991c2d-3412-456e-af62-3215940ffb6c,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+c1075141-931f-4d52-95a2-05daf3b4a3aa,0,toanngosy,2025-07-09 13:34:32,1,17978582.0,running,509d4033-d76a-4fdc-a544-ec47c36bf2cf,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+fbea0844-f353-4d01-98cc-53351a758651,0,toanngosy,2025-07-09 13:34:28,0,,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
+c1075141-931f-4d52-95a2-05daf3b4a3aa,0,toanngosy,2025-07-09 13:34:28,0,,pending,,RR-001,$SCRATCH/data/RoundRobin_input/RR-001,scenarios/lawrencium_rr_data_07092025.yaml
