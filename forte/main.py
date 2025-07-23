@@ -345,7 +345,9 @@ class FlowManager:
                     element_list.append(element)
             
             # Continue with uploading image files
-            output_img_path = Path(data_dir)/'99_fluxnet2015'
+            # Expand environment variables in data_dir (e.g., $HOME)
+            expanded_data_dir = os.path.expandvars(data_dir)
+            output_img_path = Path(expanded_data_dir)/'99_fluxnet2015'
             png_files = list(output_img_path.glob('*.png'))
             
             for entry in png_files:
