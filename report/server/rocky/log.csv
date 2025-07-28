@@ -1,4 +1,5 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
+3a034730-437d-42d1-8682-3f7f4162004e,6,toanngosy,2025-07-28 09:10:25,2,98261.0,report/RR-007/REPORT_e5ebdccf-330e-4bed-ab74-b5834c7385e9.log,e5ebdccf-330e-4bed-ab74-b5834c7385e9,RR-007,$HOME/ONEFlux/data/RoundRobin_input/RR-007,scenarios/rocky_rr_data_07082025.yaml
 3a034730-437d-42d1-8682-3f7f4162004e,2,toanngosy,2025-07-28 09:10:06,2,97381.0,report/RR-003/REPORT_5cae10a4-1f9a-4f39-8617-22bc2325c526.log,5cae10a4-1f9a-4f39-8617-22bc2325c526,RR-003,$HOME/ONEFlux/data/RoundRobin_input/RR-003,scenarios/rocky_rr_data_07082025.yaml
 9b2d837a-552a-412a-b0f8-8e1d73375b5e,0,toanngosy,2025-07-24 05:01:30,2,95682.0,report/RR-001/REPORT_b303a183-22e0-4f3f-a8f4-3109ff5d3529.log,b303a183-22e0-4f3f-a8f4-3109ff5d3529,RR-001,$HOME/ONEFlux/data/RoundRobin_input/RR-001,scenarios/rocky_rr_data_07082025.yaml
 93597274-1ed2-4e65-bb36-4b7801786d12,0,toanngosy,2025-07-24 05:01:11,2,95501.0,report/US-ARc/REPORT_80a05a98-cdc0-4093-b3ba-a252b21a108c.log,80a05a98-cdc0-4093-b3ba-a252b21a108c,US-ARc,US-ARc_sample_output,scenarios/test_data.yaml
