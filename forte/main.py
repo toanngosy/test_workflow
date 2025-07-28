@@ -313,15 +313,30 @@ class FlowManager:
             # Upload original log file (last 100 lines only)
             content_file = Path(self.oneflux_path)/f'{run_uuid}.log'
             content = get_last_n_lines(content_file, 100)
-            file_status = self.repo.create_file(f'report/{site_id}/{run_uuid}/REPORT.log',
-                                                f'generate report {run_uuid}',
-                                                content, branch=self.branch)
+            
+            # Try to get existing file first, then create or update accordingly
+            report_file_path = f'report/{site_id}/{run_uuid}/REPORT.log'
+            try:
+                existing_file = self.repo.get_contents(report_file_path, ref=self.branch)
+                # File exists, update it
+                file_status = self.repo.update_file(report_file_path,
+                                                    f'update report {run_uuid}',
+                                                    content,
+                                                    existing_file.sha,
+                                                    branch=self.branch)
+            except:
+                # File doesn't exist, create it
+                file_status = self.repo.create_file(report_file_path,
+                                                    f'generate report {run_uuid}',
+                                                    content, branch=self.branch)
             
             # Get job output files from JobManager
             output_files = self.job_manager.get_job_output_files(process_id)
             
             # Prepare for uploading both log files and image files
             element_list = list()
+            
+            # Refresh the branch reference after REPORT.log creation/update
             master_ref = self.repo.get_git_ref(f'heads/{self.branch}')
             master_sha = master_ref.object.sha
             base_tree = self.repo.get_git_tree(master_sha)
@@ -366,11 +381,28 @@ class FlowManager:
                 )
                 element_list.append(element)
             
-            # Commit all files together
-            tree = self.repo.create_git_tree(element_list, base_tree)
-            parent = self.repo.get_git_commit(master_sha)
-            commit = self.repo.create_git_commit(commit_message, tree, [parent])
-            master_ref.edit(commit.sha)
+            # Commit all files together with retry mechanism
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    # Refresh reference on each attempt to handle concurrent updates
+                    if attempt > 0:
+                        master_ref = self.repo.get_git_ref(f'heads/{self.branch}')
+                        master_sha = master_ref.object.sha
+                        base_tree = self.repo.get_git_tree(master_sha)
+                        parent = self.repo.get_git_commit(master_sha)
+                    else:
+                        parent = self.repo.get_git_commit(master_sha)
+                    
+                    tree = self.repo.create_git_tree(element_list, base_tree)
+                    commit = self.repo.create_git_commit(commit_message, tree, [parent])
+                    master_ref.edit(commit.sha)
+                    break  # Success, exit retry loop
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise  # Re-raise the exception on final attempt
+                    log.warning(f"Git operation failed on attempt {attempt + 1}, retrying: {e}")
+                    time.sleep(1)  # Brief delay before retry
             
             updated_time = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             additional_info = f'report/{site_id}/REPORT_{run_uuid}.log'
