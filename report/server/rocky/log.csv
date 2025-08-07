@@ -1,5 +1,6 @@
 uuid,index,actor,last_updated_timestamp,state,process_id,additional_info,run_uuid,site_id,data_dir,file_path
-170a8ae1-367d-4772-a832-ab0e11fb97c8,0,toanngosy,2025-08-07 15:55:45,1,248113,running,b91c4703-00f0-42e7-ad37-4cfcc76c5c8a,RR-009,$HOME/ONEFlux/data/RoundRobin_input/RR-009,scenarios/rocky_rr_data_08072025.yaml
+170a8ae1-367d-4772-a832-ab0e11fb97c8,1,toanngosy,2025-08-07 15:55:48,1,248379,running,32d88f20-9cc7-4755-b37f-4fdaf29378b4,RR-010,$HOME/ONEFlux/data/RoundRobin_input/RR-010,scenarios/rocky_rr_data_08072025.yaml
+170a8ae1-367d-4772-a832-ab0e11fb97c8,0,toanngosy,2025-08-07 15:55:45,1,248113.0,running,b91c4703-00f0-42e7-ad37-4cfcc76c5c8a,RR-009,$HOME/ONEFlux/data/RoundRobin_input/RR-009,scenarios/rocky_rr_data_08072025.yaml
 f902d7fa-1c4f-4e59-a207-68dbec4c4bc1,0,toanngosy,2025-08-07 15:55:41,0,,pending,,RR-009,$HOME/ONEFlux/data/RoundRobin_input/RR-009,scenarios/rocky_rr_data_08072025.yaml
 f902d7fa-1c4f-4e59-a207-68dbec4c4bc1,1,toanngosy,2025-08-07 15:55:41,0,,pending,,RR-010,$HOME/ONEFlux/data/RoundRobin_input/RR-010,scenarios/rocky_rr_data_08072025.yaml
 170a8ae1-367d-4772-a832-ab0e11fb97c8,0,toanngosy,2025-08-07 15:55:40,0,,pending,,RR-009,$HOME/ONEFlux/data/RoundRobin_input/RR-009,scenarios/rocky_rr_data_08072025.yaml
