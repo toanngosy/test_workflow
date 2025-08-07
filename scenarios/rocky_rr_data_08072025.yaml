@@ -16,7 +16,7 @@
         siteid: RR-010
         datadir: $HOME/ONEFlux/data/RoundRobin_input/RR-010
         firstyear: 2014
-        lastyear: 2019
+        lastyear: 2020
       custom_params: 
         recint: hh
         era-fy: 1981
